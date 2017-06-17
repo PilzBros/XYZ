@@ -1,0 +1,23 @@
+name: XYZ
+main: com.ethanpilz.xyz.XYZ
+version: 2.0
+description: Player location management system
+author: Ethan Pilz
+commands:
+    xyz:
+        description: XYZ user commands
+    xyzadmin:
+        description: XYZ Admin Commands
+permissions:
+    XYZ.*:
+        description: Gives access to all XYZ commands
+        children:
+            XYZ.admin: true
+            XYZ.user: true
+        default: op
+    XYZ.admin:
+        description: Gives admin access to XYZ admin commands
+        default: op
+    XYZ.user:
+        description: User level permissions to use XYZ
+        default: true
