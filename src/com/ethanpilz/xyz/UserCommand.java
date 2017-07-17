@@ -1,10 +1,16 @@
 package com.ethanpilz.xyz;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.HashSet;
+
+@SuppressWarnings("deprecation")
 
 public class UserCommand implements CommandExecutor {
 
@@ -18,11 +24,12 @@ public class UserCommand implements CommandExecutor {
 
                 if(args.length < 1 || args[0].equalsIgnoreCase("help")){
 
-                    sender.sendMessage(xyzprefix + "Your commands ↓");
-                    sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ me " + ChatColor.GREEN + "Find your current XYZ coordinates.");
-                    sender.sendMessage(xyzprefix + ChatColor.LIGHT_PURPLE + "More coming soon");
+                    sender.sendMessage(xyzprefix + "Command list");
+                    sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZAdmin " + ChatColor.GREEN + "Admin command list");
+                    sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ me " + ChatColor.GREEN + "Find your current XYZ coordinates");
+                    sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ cross " + ChatColor.GREEN + "Coordinates of block in crosshair");
 
-                } else if (args[0].equalsIgnoreCase("me")){
+                } else if (args[0].equalsIgnoreCase("me")) {
 
                     Player p = (Player) sender;
 
@@ -30,6 +37,22 @@ public class UserCommand implements CommandExecutor {
                     int y = p.getLocation().getBlockY();
                     int z = p.getLocation().getBlockZ();
 
+                    sender.sendMessage(xyzprefix + ChatColor.BLUE + "X" + ChatColor.WHITE + " = " + ChatColor.GREEN + x);
+                    sender.sendMessage(xyzprefix + ChatColor.BLUE + "Y" + ChatColor.WHITE + " = " + ChatColor.GREEN + y);
+                    sender.sendMessage(xyzprefix + ChatColor.BLUE + "Z" + ChatColor.WHITE + " = " + ChatColor.GREEN + z);
+
+                } else if (args[0].equalsIgnoreCase("cross")){
+
+                    Player p = (Player) sender;
+
+                    Location blockLocation = p.getTargetBlock((HashSet<Material>)null, 10).getLocation();
+
+                    int x = blockLocation.getBlockX();
+                    int y = blockLocation.getBlockY();
+                    int z = blockLocation.getBlockZ();
+
+                    sender.sendMessage(xyzprefix + ChatColor.GREEN + "Block location in crosshair:");
+                    sender.sendMessage(xyzprefix + ChatColor.AQUA + "Type: " + ChatColor.GOLD + blockLocation.getBlock().getType().toString());
                     sender.sendMessage(xyzprefix + ChatColor.YELLOW + "X = " + ChatColor.GREEN + x);
                     sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Y = " + ChatColor.GREEN + y);
                     sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Z = " + ChatColor.GREEN + z);

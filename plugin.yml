@@ -8,6 +8,8 @@ commands:
         description: XYZ user commands
     xyzadmin:
         description: XYZ Admin Commands
+    xyza:
+        description: Alias for XYZAdmin
 permissions:
     XYZ.*:
         description: Gives access to all XYZ commands

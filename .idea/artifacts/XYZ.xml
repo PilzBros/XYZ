@@ -3,11 +3,7 @@
     <output-path>$USER_HOME$/Desktop/Local Server/plugins</output-path>
     <root id="archive" name="XYZ.jar">
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
-      <element id="file-copy" path="C:/TEMP/spigot-1.11.2.jar" />
       <element id="module-output" name="XYZ" />
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      </element>
     </root>
   </artifact>
 </component>
