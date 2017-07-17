@@ -26,12 +26,13 @@ public class AdminCommand implements CommandExecutor {
 
             if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
 
-                sender.sendMessage(xyzAprefix + "Your commands:");
+                sender.sendMessage(xyzAprefix + "Command list:");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa other (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa relocate (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa version");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa tp (player) (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa swap (player) (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa freeze (player) " + ChatColor.GREEN + "<- toggle");
 
 
 
@@ -151,13 +152,41 @@ public class AdminCommand implements CommandExecutor {
                     sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough players provided. (2 needed)");
                 }
 
+            } else if (args[0].equalsIgnoreCase("freeze")) {
+                if (args.length == 2){
+                    if(Bukkit.getOfflinePlayer(args[1]).isOnline()) {
+                        Player p = (Player) Bukkit.getOfflinePlayer(args[1]);
+                        if(p.hasPotionEffect(PotionEffectType.JUMP)){
+
+                            p.setWalkSpeed(0.2f);
+                            p.removePotionEffect(PotionEffectType.JUMP);
+                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Unfroze " + p.getName());
+                            p.sendMessage(xyzAprefix + ChatColor.GREEN + "You've been unfrozen by " + sender.getName());
+
+                        } else {
+
+                            p.setWalkSpeed(0);
+                            p.addPotionEffect(PotionEffectType.JUMP.createEffect(100000, 128));
+                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Froze " + p.getName());
+                            p.sendMessage(xyzAprefix + ChatColor.GREEN + "You've been frozen by " + sender.getName());
+
+                        }
+
+                    } else {
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA + args[1]);
+                    }
+
+                } else {
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Please specify a player.");
+                }
+
             } else {
                 String unrecognized = args[0];
-                sender.sendMessage(xyzAprefix + ChatColor.RED + "Unrecognized command: " + ChatColor.AQUA + unrecognized);
+                sender.sendMessage(xyzAprefix + ChatColor.RED + "Unrecognized command " + ChatColor.AQUA + unrecognized);
             }
 
         } else {
-            sender.sendMessage(xyzAprefix + ChatColor.RED + "You don't have permission to use this command");
+            sender.sendMessage(xyzAprefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
         }
         return true;
     }
