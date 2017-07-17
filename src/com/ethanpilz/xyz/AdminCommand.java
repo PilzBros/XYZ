@@ -155,21 +155,17 @@ public class AdminCommand implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("freeze")) {
                 if (args.length == 2){
                     if(Bukkit.getOfflinePlayer(args[1]).isOnline()) {
-                        Player p = (Player) Bukkit.getOfflinePlayer(args[1]);
-                        if(p.hasPotionEffect(PotionEffectType.JUMP)){
+                        Player p = Bukkit.getPlayer(args[1]);
 
-                            p.setWalkSpeed(0.2f);
-                            p.removePotionEffect(PotionEffectType.JUMP);
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Unfroze " + p.getName());
-                            p.sendMessage(xyzAprefix + ChatColor.GREEN + "You've been unfrozen by " + sender.getName());
+                        if(XYZ.freezeManager.isPlayerFrozen(p)){
+                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
+                            p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
+                            XYZ.freezeManager.unfreezePlayer(p);
 
                         } else {
-
-                            p.setWalkSpeed(0);
-                            p.addPotionEffect(PotionEffectType.JUMP.createEffect(100000, 128));
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Froze " + p.getName());
-                            p.sendMessage(xyzAprefix + ChatColor.GREEN + "You've been frozen by " + sender.getName());
-
+                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
+                            p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
+                            XYZ.freezeManager.freezePlayer(p);
                         }
 
                     } else {
