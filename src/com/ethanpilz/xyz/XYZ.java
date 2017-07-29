@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 public class XYZ extends JavaPlugin {
 
-    public static final Logger log = Logger.getLogger("Minecraft");
     private FreezeManager freezeManager;
 
     @Override
@@ -22,13 +21,13 @@ public class XYZ extends JavaPlugin {
 
 
         //Get logger
-        log.log(Level.INFO, ChatColor.GREEN + "XYZ has been enabled.");
+        Bukkit.getLogger().log(Level.INFO, ChatColor.GREEN + "XYZ has been enabled.");
 
         //Managers
         this.freezeManager = new FreezeManager(this);
 
         //Listeners
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         getCommand("xyz").setExecutor(new UserCommand());
         getCommand("xyza").setExecutor(new AdminCommand(this));
@@ -46,7 +45,7 @@ public class XYZ extends JavaPlugin {
     @Override
     public void onDisable(){
 
-        log.log(Level.INFO, ChatColor.GREEN + "XYZ has been disabled.");
+        Bukkit.getLogger().log(Level.INFO, ChatColor.GREEN + "XYZ has been disabled.");
 
     }
     
