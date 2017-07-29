@@ -16,9 +16,14 @@ import org.bukkit.potion.PotionEffectType;
 
 public class AdminCommand implements CommandExecutor {
 
+    private final XYZ xyz;
 
     private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
+    
+    public AdminCommand(XYZ xyz) {
+        this.xyz = xyz;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -158,16 +163,16 @@ public class AdminCommand implements CommandExecutor {
                     if(Bukkit.getPlayer(args[1]).isOnline()) {
                         Player p = Bukkit.getPlayer(args[1]);
 
-                        if(XYZ.freezeManager.isPlayerFrozen(p)){
+                        if(this.xyz.getFreezeManager().isPlayerFrozen(p)){
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
-                            XYZ.freezeManager.unfreezePlayer(p);
+                            this.xyz.getFreezeManager().freezeManager.unfreezePlayer(p);
 
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
-                            XYZ.freezeManager.freezePlayer(p);
+                            this.xyz.getFreezeManager().freezeManager.freezePlayer(p);
                         }
 
                     } else {
