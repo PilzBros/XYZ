@@ -13,7 +13,7 @@ public class Lang {
         return ChatColor.stripColor(string);
     }
 
-    public void sendToSender(CommandSender commandSender, String message) {
+    public static void sendToSender(CommandSender commandSender, String message) {
         commandSender.sendMessage(Lang.color(message));
     }
 }
