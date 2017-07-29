@@ -1,8 +1,10 @@
 package com.ethanpilz.xyz.Manager;
 
+import com.ethanpilz.xyz.XYZ;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class FreezeManager {
 

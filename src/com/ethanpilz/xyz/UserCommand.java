@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 
+
 public class UserCommand implements CommandExecutor {
 
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
