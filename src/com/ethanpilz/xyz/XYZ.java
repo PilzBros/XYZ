@@ -31,7 +31,7 @@ public class XYZ extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         getCommand("xyz").setExecutor(new UserCommand());
-        getCommand("xyza").setExecutor(new AdminCommand());
+        getCommand("xyza").setExecutor(new AdminCommand(this));
         getCommand("xyzadmin").setExecutor(new AdminCommand());
 
         try {
