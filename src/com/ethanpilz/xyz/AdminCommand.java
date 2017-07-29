@@ -1,6 +1,7 @@
 package com.ethanpilz.xyz;
 
 import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,13 +12,18 @@ import org.bukkit.Location;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("unused")
 
 public class AdminCommand implements CommandExecutor {
 
+    private final XYZ xyz;
 
-    private static final String xyzAprefix = ChatColor.GOLD + "[XYZ Admin] ";
+    private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
+    
+    public AdminCommand(XYZ xyz) {
+        this.xyz = xyz;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -27,23 +33,23 @@ public class AdminCommand implements CommandExecutor {
             if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
 
                 sender.sendMessage(xyzAprefix + "Command list:");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa other (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa relocate (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa version");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa tp (player) (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa swap (player) (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZa freeze (player) " + ChatColor.GREEN + "<- toggle");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA other (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA relocate (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA version");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA tp (player) (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA swap (player) (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA freeze (player) " + ChatColor.GREEN + "<- toggle");
 
 
 
             } else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")){
 
-                sender.sendMessage(xyzAprefix + ChatColor.GREEN + "XYZ Version " + ChatColor.LIGHT_PURPLE + "2.3"); //VERSION CHANGE HERE
+                sender.sendMessage(xyzAprefix + ChatColor.GREEN + "XYZ Version " + ChatColor.LIGHT_PURPLE + "2.5"); //VERSION CHANGE HERE
 
             }
               else if (args[0].equalsIgnoreCase("other")){
                 if(args.length == 2){
-                    if(Bukkit.getOfflinePlayer(args[1]).isOnline()){
+                    if(Bukkit.getPlayer(args[1]).isOnline()){
                         Player target = Bukkit.getServer().getPlayer(args[1]);
 
                         int x = target.getLocation().getBlockX();
@@ -66,20 +72,20 @@ public class AdminCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("relocate")){
                 if (args.length == 2){
-                    if(Bukkit.getOfflinePlayer(args[1]).isOnline()){
-                        Player player = (Player) sender;
-                        Location originalLocation = player.getLocation();
+                    if(Bukkit.getPlayer(args[1]).isOnline()){
+                        Player receiver = Bukkit.getPlayer(args[1]);
+                        Location originalLocation = receiver.getLocation();
                         Random random = new Random();
-                        String name = player.getName();
+                        String name = receiver.getName();
                         int x = random.nextInt(10000);
                         int y = 100;
                         int z = random.nextInt(10000);
-                        Location teleportLocation = new Location(player.getWorld(), x, y, z);
-                        player.teleport(teleportLocation);
+                        Location teleportLocation = new Location(receiver.getWorld(), x, y, z);
+                        receiver.teleport(teleportLocation);
 
                         sender.sendMessage(xyzAprefix + ChatColor.AQUA + name + ChatColor.YELLOW + " has been moved " + (int) teleportLocation.distance(originalLocation) + " blocks away");
 
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 1000000)); //invulnerability for 10 seconds after cast
+                        receiver.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 1000000)); //invulnerability for 5 seconds after cast
 
                     } else {
                         sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
@@ -91,18 +97,18 @@ public class AdminCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("tp")) {
                 if (args.length == 3){
-                    if(Bukkit.getOfflinePlayer(args[1]).isOnline()){
-                        if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
+                    if(Bukkit.getPlayer(args[1]).isOnline()){
+                        if(Bukkit.getPlayer(args[2]).isOnline()){
 
-                            Player p1 = (Player) Bukkit.getOfflinePlayer(args[1]);
-                            Player p2 = (Player) Bukkit.getOfflinePlayer(args[2]);
+                            Player p1 = Bukkit.getPlayer(args[1]);
+                            Player p2 = Bukkit.getPlayer(args[2]);
 
                             String p1name = p1.getName();
                             String p2name = p2.getName();
 
                             p1.teleport(p2.getLocation());
 
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully tp'd " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
+                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully teleported " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.RED + "Second player is invalid.");
@@ -117,11 +123,11 @@ public class AdminCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("swap")) {
                 if (args.length == 3) {
-                     if (Bukkit.getOfflinePlayer(args[1]).isOnline()) {
-                        if (Bukkit.getOfflinePlayer(args[2]).isOnline()) {
+                     if (Bukkit.getPlayer(args[1]).isOnline()) {
+                        if (Bukkit.getPlayer(args[2]).isOnline()) {
 
-                            Player p1 = (Player) Bukkit.getOfflinePlayer(args[1]);
-                            Player p2 = (Player) Bukkit.getOfflinePlayer(args[2]);
+                            Player p1 = Bukkit.getPlayer(args[1]);
+                            Player p2 = Bukkit.getPlayer(args[2]);
 
                             String p1name = p1.getName();
                             String p2name = p2.getName();
@@ -154,18 +160,19 @@ public class AdminCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("freeze")) {
                 if (args.length == 2){
-                    if(Bukkit.getOfflinePlayer(args[1]).isOnline()) {
+                    if(Bukkit.getPlayer(args[1]).isOnline()) {
                         Player p = Bukkit.getPlayer(args[1]);
 
-                        if(XYZ.freezeManager.isPlayerFrozen(p)){
+                        if(this.xyz.getFreezeManager().isPlayerFrozen(p)){
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
-                            XYZ.freezeManager.unfreezePlayer(p);
+                            this.xyz.getFreezeManager().freezeManager.unfreezePlayer(p);
+
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
-                            XYZ.freezeManager.freezePlayer(p);
+                            this.xyz.getFreezeManager().freezeManager.freezePlayer(p);
                         }
 
                     } else {

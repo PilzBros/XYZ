@@ -3,7 +3,7 @@ package com.ethanpilz.xyz;
 import com.ethanpilz.xyz.Listener.PlayerListener;
 import com.ethanpilz.xyz.Manager.FreezeManager;
 import com.ethanpilz.xyz.UserCommand;
-import com.ethanpilz.xyz.AdminCommand;
+//import com.ethanpilz.xyz.AdminCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +31,6 @@ public class XYZ extends JavaPlugin {
 
         getCommand("xyz").setExecutor(new UserCommand());
         getCommand("xyza").setExecutor(new AdminCommand(this));
-        getCommand("xyzadmin").setExecutor(new AdminCommand());
 
         try {
             MetricsLite metrics = new MetricsLite(this);
