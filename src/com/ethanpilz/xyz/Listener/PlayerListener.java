@@ -8,10 +8,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PlayerListener implements Listener {
+    
+    private final XYZ xyz;
+    
+    public PlayerListener(XYZ xyz) {
+        this.xyz = xyz;
+    }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent event) {
-     if(XYZ.freezeManager.isPlayerFrozen(event.getPlayer())){
+     if(this.xyz.getFreezeManager().isPlayerFrozen(event.getPlayer())){
          Location from = event.getFrom();
          Location to = event.getTo();
          event.setCancelled(!(from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()));
