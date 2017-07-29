@@ -6,12 +6,10 @@ import java.util.HashSet;
 
 public class FreezeManager {
 
-    private HashSet<Player> frozenPlayers;
+    private Set<Player> frozenPlayers;
 
-    public FreezeManager(){
-
+    public FreezeManager(XYZ xyz){
         frozenPlayers = new HashSet<>();
-
     }
 
     /**
