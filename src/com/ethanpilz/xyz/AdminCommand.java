@@ -108,7 +108,7 @@ public class AdminCommand implements CommandExecutor {
 
                             p1.teleport(p2.getLocation());
 
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully teleported " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
+                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully tp'd " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.RED + "Second player is invalid.");
@@ -144,7 +144,7 @@ public class AdminCommand implements CommandExecutor {
                             p1.sendMessage(xyzprefix + "You've been swapped with " + ChatColor.AQUA + name2);
                             p2.sendMessage(xyzprefix + "You've been swapped with " + ChatColor.AQUA + name1);
 
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully swapped " + ChatColor.AQUA + p1name + ChatColor.GREEN + " with " + ChatColor.AQUA + p2name);
+                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Swapped " + ChatColor.AQUA + p1name + ChatColor.GREEN + " with " + ChatColor.AQUA + p2name);
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid players");
@@ -166,13 +166,13 @@ public class AdminCommand implements CommandExecutor {
                         if(this.xyz.getFreezeManager().isPlayerFrozen(p)){
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
-                            this.xyz.getFreezeManager().freezeManager.unfreezePlayer(p);
+                            this.xyz.getFreezeManager().unfreezePlayer(p);
 
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
-                            this.xyz.getFreezeManager().freezeManager.freezePlayer(p);
+                            this.xyz.getFreezeManager().freezePlayer(p);
                         }
 
                     } else {
