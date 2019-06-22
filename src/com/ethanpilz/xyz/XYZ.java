@@ -10,17 +10,26 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.ethanpilz.xyz.AdminCommand.xyzVersion;
+
 public class XYZ extends JavaPlugin {
 
     private FreezeManager freezeManager;
-
+    private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
+    private static final String SpigotVersion = "1.14.2";
     @Override
     public void onEnable(){
 
 
         //Get logger
-        Bukkit.getLogger().log(Level.INFO, ChatColor.GREEN + "XYZ has been enabled.");
-
+        if (Bukkit.getVersion().contains("1.14")) {
+            Bukkit.getLogger().log(Level.INFO, xyzprefix + ChatColor.GRAY + "Your version " + ChatColor.AQUA + Bukkit.getVersion() + " is supported!");
+        } else {
+            Bukkit.getLogger().log(Level.INFO, xyzprefix + ChatColor.RED +
+                    "Your version " + ChatColor.AQUA + Bukkit.getVersion() + ChatColor.RED + " isn't optimal.");
+            Bukkit.getLogger().log(Level.INFO, xyzprefix + ChatColor.GRAY +
+                    "Version " + ChatColor.LIGHT_PURPLE + xyzVersion + ChatColor.RED + " is made for Spigot " + ChatColor.GREEN + SpigotVersion);
+        }
         //Managers
         this.freezeManager = new FreezeManager(this);
 

@@ -24,9 +24,10 @@ public class UserCommand implements CommandExecutor {
             if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
 
                 sender.sendMessage(xyzprefix + "Command list");
-                sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZAdmin " + ChatColor.GREEN + "Admin command list");
-                sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ me " + ChatColor.GREEN + "Find your current XYZ coordinates");
-                sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ cross " + ChatColor.GREEN + "Coordinates of block in crosshair");
+                sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZAdmin " + ChatColor.RED + "- " + ChatColor.GREEN + "Admin command list");
+                sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ me " + ChatColor.RED + "- " + ChatColor.GREEN + "Find your current XYZ coordinates");
+                sender.sendMessage(xyzprefix + ChatColor.AQUA + "/XYZ cross"+ ChatColor.GREEN + "/"
+                                    + ChatColor.AQUA + "c" + ChatColor.RED + " - " + ChatColor.GREEN + "Coordinates of block in crosshair");
 
             } else if (args[0].equalsIgnoreCase("me")) {
 
@@ -39,6 +40,8 @@ public class UserCommand implements CommandExecutor {
                 sender.sendMessage(xyzprefix + ChatColor.BLUE + "X" + ChatColor.WHITE + " = " + ChatColor.GREEN + x);
                 sender.sendMessage(xyzprefix + ChatColor.BLUE + "Y" + ChatColor.WHITE + " = " + ChatColor.GREEN + y);
                 sender.sendMessage(xyzprefix + ChatColor.BLUE + "Z" + ChatColor.WHITE + " = " + ChatColor.GREEN + z);
+                sender.sendMessage(xyzprefix + ChatColor.BLUE + "World: " + ChatColor.LIGHT_PURPLE + p.getWorld().getName());
+                sender.sendMessage(xyzprefix + ChatColor.BLUE + "Biome: " + ChatColor.LIGHT_PURPLE + ((Player) sender).getWorld().getBiome(((Player) sender).getLocation().getBlockX(), ((Player) sender).getLocation().getBlockZ()));
 
             } else if (args[0].equalsIgnoreCase("cross") || args[0].equalsIgnoreCase("c")) {
 
@@ -56,17 +59,16 @@ public class UserCommand implements CommandExecutor {
                 sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Y = " + ChatColor.GREEN + y);
                 sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Z = " + ChatColor.GREEN + z);
 
-            } else {
-                sender.sendMessage(xyzprefix + ChatColor.DARK_RED + "Unrecognized command " + ChatColor.AQUA + args[0]);
-            }
+                } else {
+                    sender.sendMessage(xyzprefix + ChatColor.DARK_RED + "Unrecognized command " + ChatColor.AQUA + args[0]);
+                }
 
             } else {
                 sender.sendMessage(xyzAprefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
 
+            }return true;
         }
-            return true;
     }
 
-}
 
 

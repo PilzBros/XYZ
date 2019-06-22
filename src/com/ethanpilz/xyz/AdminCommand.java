@@ -20,6 +20,7 @@ public class AdminCommand implements CommandExecutor {
 
     private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
+    public static final String xyzVersion = "1.1.7"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
     
     public AdminCommand(XYZ xyz) {
         this.xyz = xyz;
@@ -33,46 +34,48 @@ public class AdminCommand implements CommandExecutor {
             if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
 
                 sender.sendMessage(xyzAprefix + "Command list:");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA other (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA relocate (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA version");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA relocate (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA tp (player) (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA swap (player) (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA freeze (player) " + ChatColor.GREEN + "<- toggle");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA distance (player)");
 
 
 
             } else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")){
 
-                sender.sendMessage(xyzAprefix + ChatColor.GREEN + "XYZ Version " + ChatColor.LIGHT_PURPLE + "2.5"); //VERSION CHANGE HERE
+                sender.sendMessage(xyzAprefix + ChatColor.GREEN + "XYZ Version " + ChatColor.LIGHT_PURPLE + xyzVersion);
 
             }
-              else if (args[0].equalsIgnoreCase("other")){
+              else if (args[0].equalsIgnoreCase("other") || args[0].equalsIgnoreCase("o")){
                 if(args.length == 2){
-                    if(Bukkit.getPlayer(args[1]).isOnline()){
+                    if(Bukkit.getPlayer(args[1]) != null){
                         Player target = Bukkit.getServer().getPlayer(args[1]);
 
                         int x = target.getLocation().getBlockX();
                         int y = target.getLocation().getBlockY();
                         int z = target.getLocation().getBlockZ();
-                        String name = target.getName();
 
-                        sender.sendMessage(xyzAprefix + ChatColor.AQUA + name + ChatColor.AQUA + "'s" + ChatColor.GREEN +" location is");
+                        sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.AQUA + "'s" + ChatColor.GREEN +" location is");
                         sender.sendMessage(xyzAprefix + ChatColor.BLUE + "X" + ChatColor.WHITE + " = " + ChatColor.GREEN + x);
                         sender.sendMessage(xyzAprefix + ChatColor.BLUE + "Y" + ChatColor.WHITE + " = " + ChatColor.GREEN + y);
                         sender.sendMessage(xyzAprefix + ChatColor.BLUE + "Z" + ChatColor.WHITE + " = " + ChatColor.GREEN + z);
+                        sender.sendMessage(xyzprefix + ChatColor.BLUE + "World: " + ChatColor.LIGHT_PURPLE + target.getWorld().getName());
+                        sender.sendMessage(xyzprefix + ChatColor.BLUE + "Biome: " + ChatColor.LIGHT_PURPLE + target.getWorld().getBiome(target.getLocation().getBlockX(), target.getLocation().getBlockZ()));
 
                     } else {
                         sender.sendMessage(xyzAprefix + ChatColor.DARK_RED + "Invalid player");
                     }
 
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.DARK_RED + "You must provide a player name.");
+                    sender.sendMessage(xyzAprefix + ChatColor.DARK_RED + "You must provide a player");
                 }
 
             } else if (args[0].equalsIgnoreCase("relocate")){
                 if (args.length == 2){
-                    if(Bukkit.getPlayer(args[1]).isOnline()){
+                    if(Bukkit.getPlayer(args[1]) != null){
                         Player receiver = Bukkit.getPlayer(args[1]);
                         Location originalLocation = receiver.getLocation();
                         Random random = new Random();
@@ -87,18 +90,21 @@ public class AdminCommand implements CommandExecutor {
 
                         receiver.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 1000000)); //invulnerability for 5 seconds after cast
 
+                    } else if(Bukkit.getPlayer(args[1]) == null){
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
                     } else {
                         sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
                     }
 
+
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to provide a player.");
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You must provide a player.");
                 }
 
             } else if (args[0].equalsIgnoreCase("tp")) {
                 if (args.length == 3){
-                    if(Bukkit.getPlayer(args[1]).isOnline()){
-                        if(Bukkit.getPlayer(args[2]).isOnline()){
+                    if(Bukkit.getPlayer(args[1]) != null){
+                        if(Bukkit.getPlayer(args[2]) != null){
 
                             Player p1 = Bukkit.getPlayer(args[1]);
                             Player p2 = Bukkit.getPlayer(args[2]);
@@ -114,7 +120,7 @@ public class AdminCommand implements CommandExecutor {
                             sender.sendMessage(xyzAprefix + ChatColor.RED + "Second player is invalid.");
                         }
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "First player is invalid.");
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "First and/or second player is invalid.");
                     }
                 } else {
                     sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough players provided. (2 needed)");
@@ -123,8 +129,8 @@ public class AdminCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("swap")) {
                 if (args.length == 3) {
-                     if (Bukkit.getPlayer(args[1]).isOnline()) {
-                        if (Bukkit.getPlayer(args[2]).isOnline()) {
+                     if (Bukkit.getPlayer(args[1]) != null) {
+                        if (Bukkit.getPlayer(args[2]) != null) {
 
                             Player p1 = Bukkit.getPlayer(args[1]);
                             Player p2 = Bukkit.getPlayer(args[2]);
@@ -160,7 +166,7 @@ public class AdminCommand implements CommandExecutor {
 
             } else if (args[0].equalsIgnoreCase("freeze")) {
                 if (args.length == 2){
-                    if(Bukkit.getPlayer(args[1]).isOnline()) {
+                    if(Bukkit.getPlayer(args[1]) != null) {
                         Player p = Bukkit.getPlayer(args[1]);
 
                         if(this.xyz.getFreezeManager().isPlayerFrozen(p)){
@@ -176,20 +182,40 @@ public class AdminCommand implements CommandExecutor {
                         }
 
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA + args[1]);
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
                     }
 
                 } else {
                     sender.sendMessage(xyzAprefix + ChatColor.RED + "Please specify a player.");
                 }
 
-            } else {
+            }  else if (args[0].equalsIgnoreCase("distance")) {
+                  if (args.length == 2){
+                      if(Bukkit.getPlayer(args[1]) != null){
+                          if(sender instanceof Player){
+                              Player target = Bukkit.getServer().getPlayer(args[1]);
+
+                              Location targetLocation = target.getLocation();
+                              Location senderLocation = ((Player) sender).getLocation();
+                              sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " is " + targetLocation.distance(senderLocation) + " blocks away");
+                          } else {
+                              sender.sendMessage(xyzAprefix + ChatColor.RED + "This can't be executed by the console, because you dont have coordinates.");
+                          }
+                      } else {
+                          sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                      }
+                  } else {
+                      sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to compare distances with!");
+                  }
+
+            }  else {
                 String unrecognized = args[0];
                 sender.sendMessage(xyzAprefix + ChatColor.RED + "Unrecognized command " + ChatColor.AQUA + unrecognized);
             }
 
         } else {
-            sender.sendMessage(xyzAprefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
+            sender.sendMessage(xyzAprefix + ChatColor.RED + "Insufficient permission to use "
+                    + ChatColor.AQUA + args[0] + ChatColor.RED + ". You'll need" + ChatColor.AQUA + " xyz.admin" + ChatColor.RED + " to do that.");
         }
         return true;
     }
