@@ -1,14 +1,18 @@
 package com.ethanpilz.xyz;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import com.mojang.datafixers.TypeRewriteRule;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.Location;
+import org.bukkit.event.player.PlayerEditBookEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -20,7 +24,7 @@ public class AdminCommand implements CommandExecutor {
 
     private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
-    public static final String xyzVersion = "1.1.7"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
+    public static final String xyzVersion = "1.1.8"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
     
     public AdminCommand(XYZ xyz) {
         this.xyz = xyz;
@@ -36,11 +40,12 @@ public class AdminCommand implements CommandExecutor {
                 sender.sendMessage(xyzAprefix + "Command list:");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA version");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA relocate (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA relocate"+ ChatColor.GREEN + "/" + ChatColor.AQUA + "r (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA tp (player) (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA swap (player) (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA swap" + ChatColor.GREEN + "/" + ChatColor.AQUA + "s (player) (player)");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA freeze (player) " + ChatColor.GREEN + "<- toggle");
                 sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA distance (player)");
+                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA spawn (player)");
 
 
 
@@ -73,7 +78,7 @@ public class AdminCommand implements CommandExecutor {
                     sender.sendMessage(xyzAprefix + ChatColor.DARK_RED + "You must provide a player");
                 }
 
-            } else if (args[0].equalsIgnoreCase("relocate")){
+            } else if (args[0].equalsIgnoreCase("relocate") || (args[0].equalsIgnoreCase("r"))){
                 if (args.length == 2){
                     if(Bukkit.getPlayer(args[1]) != null){
                         Player receiver = Bukkit.getPlayer(args[1]);
@@ -127,7 +132,7 @@ public class AdminCommand implements CommandExecutor {
                 }
 
 
-            } else if (args[0].equalsIgnoreCase("swap")) {
+            } else if (args[0].equalsIgnoreCase("swap") || (args[0].equalsIgnoreCase("s"))) {
                 if (args.length == 3) {
                      if (Bukkit.getPlayer(args[1]) != null) {
                         if (Bukkit.getPlayer(args[2]) != null) {
@@ -173,12 +178,14 @@ public class AdminCommand implements CommandExecutor {
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
                             this.xyz.getFreezeManager().unfreezePlayer(p);
+                            p.playSound(p.getLocation(), Sound.ENTITY_SILVERFISH_AMBIENT , 1, 1);
 
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
                             p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
                             this.xyz.getFreezeManager().freezePlayer(p);
+                            p.playSound(p.getLocation(), Sound.ENTITY_SILVERFISH_AMBIENT , 1, 1);
                         }
 
                     } else {
@@ -199,7 +206,7 @@ public class AdminCommand implements CommandExecutor {
                               Location senderLocation = ((Player) sender).getLocation();
                               sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " is " + targetLocation.distance(senderLocation) + " blocks away");
                           } else {
-                              sender.sendMessage(xyzAprefix + ChatColor.RED + "This can't be executed by the console, because you dont have coordinates.");
+                              sender.sendMessage(xyzAprefix + ChatColor.RED + "This can't be executed by the console, because you don't have coordinates.");
                           }
                       } else {
                           sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
@@ -207,15 +214,28 @@ public class AdminCommand implements CommandExecutor {
                   } else {
                       sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to compare distances with!");
                   }
-
-            }  else {
-                String unrecognized = args[0];
-                sender.sendMessage(xyzAprefix + ChatColor.RED + "Unrecognized command " + ChatColor.AQUA + unrecognized);
+            }   else if (args[0].equalsIgnoreCase("spawn")) {
+                  if (args.length == 2){
+                      if (Bukkit.getPlayer(args[1]) != null){
+                          Player target = Bukkit.getServer().getPlayer(args[1]);
+                          Location spawn = Bukkit.getServer().getPlayer(args[1]).getWorld().getSpawnLocation();
+                          target.teleport(spawn);
+                          target.playSound(target.getLocation(), Sound.ENTITY_DROWNED_SHOOT, 1, 1);
+                      } else {
+                          sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                      }
+                  } else {
+                      sender.sendMessage(xyzAprefix + ChatColor.RED + "Please specify a player.");
+                  }
+            } else {
+                String command = args[0];
+                sender.sendMessage(xyzAprefix + ChatColor.RED + "Command " + ChatColor.AQUA + command + ChatColor.RED + " unrecognized.");
             }
-
-        } else {
+        } else if (!sender.hasPermission("xyz.admin")) {
             sender.sendMessage(xyzAprefix + ChatColor.RED + "Insufficient permission to use "
                     + ChatColor.AQUA + args[0] + ChatColor.RED + ". You'll need" + ChatColor.AQUA + " xyz.admin" + ChatColor.RED + " to do that.");
+        } else {
+            sender.sendMessage(xyzprefix + ChatColor.RED + "Something went wrong...");
         }
         return true;
     }
