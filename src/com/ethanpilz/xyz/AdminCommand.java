@@ -37,15 +37,15 @@ public class AdminCommand implements CommandExecutor {
 
             if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
 
-                sender.sendMessage(xyzAprefix + "Command list:");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA version");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA relocate"+ ChatColor.GREEN + "/" + ChatColor.AQUA + "r (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA tp (player) (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA swap" + ChatColor.GREEN + "/" + ChatColor.AQUA + "s (player) (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA freeze (player) " + ChatColor.GREEN + "<- toggle");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA distance (player)");
-                sender.sendMessage(xyzAprefix + ChatColor.AQUA + "/XYZA spawn (player)");
+                sender.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "--------------------" + ChatColor.GOLD + ChatColor.BOLD + " XYZ " + ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "--------------------");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA version");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA relocate"+ ChatColor.GREEN + "/" + ChatColor.AQUA + "r (player)");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA tp (player) (player)");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA swap" + ChatColor.GREEN + "/" + ChatColor.AQUA + "s (player) (player)");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA freeze (player) " + ChatColor.GREEN + "<- toggle");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA distance (player)");
+                sender.sendMessage( ChatColor.AQUA + "/XYZA spawn (player)");
 
 
 
@@ -90,10 +90,11 @@ public class AdminCommand implements CommandExecutor {
                         int z = random.nextInt(10000);
                         Location teleportLocation = new Location(receiver.getWorld(), x, y, z);
                         receiver.teleport(teleportLocation);
+                        receiver.playSound(receiver.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT , 1, 1);
 
-                        sender.sendMessage(xyzAprefix + ChatColor.AQUA + name + ChatColor.YELLOW + " has been moved " + (int) teleportLocation.distance(originalLocation) + " blocks away");
-
+                        sender.sendMessage(xyzAprefix + ChatColor.AQUA + name + ChatColor.YELLOW + " has been moved " + (int) teleportLocation.distance(originalLocation) + " blocks away.");
                         receiver.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 1000000)); //invulnerability for 5 seconds after cast
+                        receiver.sendMessage(xyzprefix + ChatColor.YELLOW + "You've been relocated " + ChatColor.AQUA + (int) teleportLocation.distance(originalLocation) + ChatColor.YELLOW + " blocks away.");
 
                     } else if(Bukkit.getPlayer(args[1]) == null){
                         sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
@@ -120,6 +121,7 @@ public class AdminCommand implements CommandExecutor {
                             p1.teleport(p2.getLocation());
 
                             sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully tp'd " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
+                            p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT , 1, 1);
 
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.RED + "Second player is invalid.");
@@ -153,7 +155,9 @@ public class AdminCommand implements CommandExecutor {
                             String name2 = p2.getName();
 
                             p1.sendMessage(xyzprefix + "You've been swapped with " + ChatColor.AQUA + name2);
+                            p1.playSound(p1.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT , 1, 1);
                             p2.sendMessage(xyzprefix + "You've been swapped with " + ChatColor.AQUA + name1);
+                            p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT , 1, 1);
 
                             sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Swapped " + ChatColor.AQUA + p1name + ChatColor.GREEN + " with " + ChatColor.AQUA + p2name);
 
