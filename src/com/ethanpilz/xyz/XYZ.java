@@ -2,13 +2,13 @@ package com.ethanpilz.xyz;
 
 import com.ethanpilz.xyz.Listener.PlayerListener;
 import com.ethanpilz.xyz.Manager.FreezeManager;
+import com.ethanpilz.xyz.Manager.RealmManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.ethanpilz.xyz.MetricsLite;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.ethanpilz.xyz.AdminCommand.xyzVersion;
 
@@ -57,5 +57,9 @@ public class XYZ extends JavaPlugin {
     
     public FreezeManager getFreezeManager() {
         return this.freezeManager;
+    }
+
+    public RealmManager getRealmManager() {
+        return this.realmManager;
     }
 }
