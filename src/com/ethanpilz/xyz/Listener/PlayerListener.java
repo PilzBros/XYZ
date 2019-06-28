@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
+import com.ethanpilz.xyz.AdminCommand;
 
 public class PlayerListener implements Listener {
     
@@ -22,5 +24,9 @@ public class PlayerListener implements Listener {
          Location to = event.getTo();
          event.setCancelled(!(from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()));
      }
+    }
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onRealmTravel(PlayerPortalEvent event) {
+        if(this.xyz.
     }
 }
