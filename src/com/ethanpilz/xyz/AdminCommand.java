@@ -346,9 +346,13 @@ public class AdminCommand implements CommandExecutor {
 
                 sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Server version: " + ChatColor.AQUA + Bukkit.getServer().getBukkitVersion());
                 sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "IP: " + ChatColor.AQUA + Bukkit.getServer().getIp());
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Total memory - " + ChatColor.AQUA + (Runtime.getRuntime().totalMemory()/1024/1024) + " MB");
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Free memory - " + ChatColor.AQUA + (Runtime.getRuntime().freeMemory()/1024/1024) + " MB");
                 sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Online Mode: " + ChatColor.AQUA + Bukkit.getServer().getOnlineMode());
                 sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Banned: " + ChatColor.AQUA + Bukkit.getServer().getBannedPlayers().size());
-
+                for(World world : Bukkit.getWorlds()) {
+                    sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "World: " + ChatColor.AQUA + world.getName());
+                }
             }
                     else {
                     String command = args[0];
