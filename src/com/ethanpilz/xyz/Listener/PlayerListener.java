@@ -2,6 +2,7 @@ package com.ethanpilz.xyz.Listener;
 
 import com.ethanpilz.xyz.XYZ;
 import org.bukkit.Location;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,8 +26,10 @@ public class PlayerListener implements Listener {
          event.setCancelled(!(from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()));
      }
     }
-    @EventHandler(priority = EventPriority.NORMAL)
+   /* @EventHandler(priority = EventPriority.NORMAL)
     public void onRealmTravel(PlayerPortalEvent event) {
-        if(this.xyz.
-    }
+        if(this.xyz.getRealmManager().areRealmsLocked(event.getPlayer()){
+            Event portalTravel = event.getFrom()
+        }
+    }*/
 }

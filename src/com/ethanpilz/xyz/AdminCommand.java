@@ -1,17 +1,18 @@
 package com.ethanpilz.xyz;
 
-import java.util.ArrayList;
 import java.util.Random;
 
+import net.minecraft.server.v1_15_R1.MinecraftServer;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import static com.ethanpilz.xyz.Strings.HelpMenu.*;
+import static com.ethanpilz.xyz.XYZ.SpigotVersion;
 
 @SuppressWarnings("unused")
 
@@ -23,7 +24,7 @@ public class AdminCommand implements CommandExecutor {
     private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
     public static final String xyzVersion = "1.1.8"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
-    
+
     public AdminCommand(XYZ xyz) {
         this.xyz = xyz;
     }
@@ -33,22 +34,47 @@ public class AdminCommand implements CommandExecutor {
 
         if (sender.hasPermission("xyz.admin")) {
 
-            if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
+            if (args.length < 1) {
 
-                sender.sendMessage(ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "--------------------" + ChatColor.GOLD + ChatColor.BOLD + " XYZ " + ChatColor.GRAY + "" + ChatColor.STRIKETHROUGH + "--------------------");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA version");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA relocate" + ChatColor.GREEN + "/" + ChatColor.AQUA + "r (player)");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA tp (player) (player)");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA swap" + ChatColor.GREEN + "/" + ChatColor.AQUA + "s (player) (player)");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA freeze (player) " + ChatColor.GREEN + "<- toggle");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA distance (player)");
-                sender.sendMessage(ChatColor.AQUA + "/XYZA spawn (player)");
+                sender.sendMessage(tophelpborder);
+                sender.sendMessage(ChatColor.AQUA + "/xyza version" + ChatColor.GREEN + "/" + ChatColor.AQUA + "v");
+                sender.sendMessage(ChatColor.AQUA + "/xyza other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
+                sender.sendMessage(ChatColor.AQUA + "/xyza relocate" + ChatColor.GREEN + "/" + ChatColor.AQUA + "r (player)");
+                sender.sendMessage(ChatColor.AQUA + "/xyza tp (player) (player)");
+                sender.sendMessage(ChatColor.AQUA + "/xyza swap" + ChatColor.GREEN + "/" + ChatColor.AQUA + "s (player) (player)");
+                sender.sendMessage(ChatColor.AQUA + "/xyza freeze (player) " + ChatColor.GREEN + "<- toggle");
+                sender.sendMessage(ChatColor.AQUA + "/xyza distance (player)");
+                sender.sendMessage(ChatColor.AQUA + "/xyza serverinfo");
+                sender.sendMessage(bottomhelpborder1);
 
+            } else if (args[0].equalsIgnoreCase("help")) {
+                if (args.length == 1 || args[1].equalsIgnoreCase("1")) {
+                    sender.sendMessage(tophelpborder);
+                    sender.sendMessage(ChatColor.AQUA + "/xyza version" + ChatColor.GREEN + "/" + ChatColor.AQUA + "v");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza other" + ChatColor.GREEN + "/" + ChatColor.AQUA + "o (player)");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza relocate" + ChatColor.GREEN + "/" + ChatColor.AQUA + "r (player)");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza tp (player) (player)");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza swap" + ChatColor.GREEN + "/" + ChatColor.AQUA + "s (player) (player)");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza freeze (player) " + ChatColor.GREEN + "<- toggle");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza distance (player)");
+                    sender.sendMessage(ChatColor.AQUA + "/xyza serverinfo");
+                    sender.sendMessage(bottomhelpborder1);
 
+                } else if (args[1].equalsIgnoreCase("2")) {
+                        sender.sendMessage(tophelpborder);
+                        sender.sendMessage(ChatColor.AQUA + "/xyza stalk (player)");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza clear (player)" + ChatColor.RED + " - " + ChatColor.GREEN + "Clear player potion effects");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza blind (player) " + ChatColor.GREEN + "<- toggle");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza spawn (player)");
+                        sender.sendMessage(bottomhelpborder2);
+                } else if (Integer.parseInt(args[1]) > 2) {
+
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid page.");
+                }
             } else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")) {
 
-                sender.sendMessage(xyzAprefix + ChatColor.GREEN + "XYZ Version " + ChatColor.LIGHT_PURPLE + xyzVersion);
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + ">>Spigot Official " + ChatColor.AQUA + xyzVersion);
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Last built for " + ChatColor.GREEN + SpigotVersion + ChatColor.YELLOW + " on" + ChatColor.AQUA + "April 29, 2020");
 
             } else if (args[0].equalsIgnoreCase("other") || args[0].equalsIgnoreCase("o")) {
                 if (args.length == 2) {
@@ -116,7 +142,7 @@ public class AdminCommand implements CommandExecutor {
 
                             p1.teleport(p2.getLocation());
 
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Successfully tp'd " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
+                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Teleported " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
                             p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 
                         } else {
@@ -124,6 +150,16 @@ public class AdminCommand implements CommandExecutor {
                         }
                     } else {
                         sender.sendMessage(xyzAprefix + ChatColor.RED + "First and/or second player is invalid.");
+                    }
+                } else if (args.length == 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        Player p1 = (Player) sender;
+                        Player p2 = Bukkit.getPlayer(args[1]);
+                        String p2name = p2.getName();
+
+                        p1.teleport(p2.getLocation());
+                        sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Teleported to " + ChatColor.AQUA + p2name);
+                        p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                     }
                 } else {
                     sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough players provided. (2 needed)");
@@ -204,15 +240,22 @@ public class AdminCommand implements CommandExecutor {
 
                             Location targetLocation = target.getLocation();
                             Location senderLocation = ((Player) sender).getLocation();
-                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " is " + targetLocation.distance(senderLocation) + " blocks away");
+                            if (((Player) sender).getWorld().equals(target.getWorld())) {
+                                sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " is " + ((int) targetLocation.distance(senderLocation)) + " blocks away");
+                            } else {
+                                sender.sendMessage(xyzAprefix + ChatColor.RED + "You're in " + ChatColor.GREEN + ((Player) sender).getWorld().getName()
+                                        + ChatColor.RED + " and " + ChatColor.AQUA + target.getName() + ChatColor.RED + " is in " + ChatColor.GREEN + target.getWorld().getName());
+                            }
                         } else {
                             sender.sendMessage(xyzAprefix + ChatColor.RED + "This can't be executed by the console, because you don't have coordinates.");
                         }
                     } else {
                         sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
                     }
+                } else if (args.length > 2) {
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Too many arguments. Correct usage: " + ChatColor.AQUA + "/xyza distance (player)");
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to compare distances with!");
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to compare distances with.");
                 }
             } else if (args[0].equalsIgnoreCase("spawn")) {
                 if (args.length == 2) {
@@ -228,26 +271,95 @@ public class AdminCommand implements CommandExecutor {
                     sender.sendMessage(xyzAprefix + ChatColor.RED + "Please specify a player.");
                 }
             } else if (args[0].equalsIgnoreCase("portal") || args[0].equalsIgnoreCase("p")) {
-                if (args.length == 2){
-                    if(args[2] == "allow" || args[2] == "unlock"){
+                if (args.length == 2) {
+                    if (args[2] == "allow" || args[2] == "unlock") {
                         boolean portalTravel = true;
-                    }
-                    else if (args[2] == "deny" || args[2] == "lock"){
+                        sender.sendMessage(xyzAprefix + "Portals have been" + ChatColor.GREEN + "unlocked.");
+                    } else if (args[2] == "deny" || args[2] == "lock") {
                         boolean portalTravel = false;
+                        sender.sendMessage(xyzAprefix + "Portals have been" + ChatColor.RED + "locked.");
+
+                    } else if (args[2] != "lock" || args[2] != "unlock") {
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Unknown request " + ChatColor.AQUA + args[2] + ChatColor.RED + ". " + ChatColor.RED + "Use " +
+                                ChatColor.GREEN + "/xyza portal (lock/unlock)");
                     }
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough arguments." +ChatColor.AQUA + "/xyza portal (lock/unlock)");
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough arguments. " + ChatColor.AQUA + "/xyza portal (lock/unlock)");
+                }
+            } else if (args[0].equalsIgnoreCase("stalk")) {
+                if (args.length == 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        Player target = Bukkit.getServer().getPlayer(args[1]);
+                        Player sender1 = (Player) sender;
+                        sender1.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000000, 1)); //invisibilty forever
+                        sender1.teleport(target.getLocation());
+                    } else {
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA + args[1]);
+                    }
+                } else {
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to stalk.");
+                }
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                if (args.length == 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Potion effects cleared from " + ChatColor.AQUA + Bukkit.getPlayer(args[1]).getName());
+                        Player player = Bukkit.getServer().getPlayer(args[1]);
+                        assert player != null;
+                        for (PotionEffect effect : player.getActivePotionEffects()) {
+                            player.removePotionEffect(effect.getType());
+                        }
+                    }
+                } else if (args.length == 1) {
+                    if (sender instanceof Player) {
+                        sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Cleared your potion effects.");
+                        Player sender1 = (Player) sender;
+                        for (PotionEffect effect : sender1.getActivePotionEffects()) {
+                            sender1.removePotionEffect(effect.getType());
+                        }
+                    }
+                }
+            } else if (args[0].equalsIgnoreCase("blind")) {
+                if (args.length == 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        Player p = Bukkit.getPlayer(args[1]);
+
+                        if (this.xyz.getBlindManager().isPlayerBlind(p)) {
+                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " is no longer blinded.");
+                            this.xyz.getBlindManager().unblindPlayer(p);
+                            p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 1, 1);
+
+                        } else {
+                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " blinded.");
+                            this.xyz.getBlindManager().blindPlayer(p);
+                            p.playSound(p.getLocation(), Sound.ENTITY_BAT_DEATH, 1, 1);
+                        }
+
+                    } else {
+                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA);
+                    }
+
+                } else {
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to blind.");
+                }
+
+            } else if (args[0].equalsIgnoreCase("serverinfo")){
+
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Server version: " + ChatColor.AQUA + Bukkit.getServer().getBukkitVersion());
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "IP: " + ChatColor.AQUA + Bukkit.getServer().getIp());
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Online Mode: " + ChatColor.AQUA + Bukkit.getServer().getOnlineMode());
+                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Banned: " + ChatColor.AQUA + Bukkit.getServer().getBannedPlayers().size());
+
+            }
+                    else {
+                    String command = args[0];
+                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Command " + ChatColor.AQUA + command + ChatColor.RED + " unrecognized.");
                 }
             } else {
-                String command = args[0];
-                sender.sendMessage(xyzAprefix + ChatColor.RED + "Command " + ChatColor.AQUA + command + ChatColor.RED + " unrecognized.");
-            }
-        } else if (!sender.hasPermission("xyz.admin")) {
-            sender.sendMessage(xyzAprefix + ChatColor.RED + "Insufficient permission to use "
-                    + ChatColor.AQUA + args[0] + ChatColor.RED + ". You'll need" + ChatColor.AQUA + " xyz.admin" + ChatColor.RED + " to do that.");
-        } else {
-            sender.sendMessage(xyzprefix + ChatColor.RED + "Something went wrong...");
+            sender.sendMessage(xyzAprefix + ChatColor.RED + "Sorry, you don't have permissions to use " + ChatColor.AQUA + args[0] + ChatColor.RED + ". You'll need "
+                    + ChatColor.GREEN + "xyz.admin");
         }
         return true;
+        }
+
     }
-}
+

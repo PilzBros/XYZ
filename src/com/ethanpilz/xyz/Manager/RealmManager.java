@@ -15,7 +15,7 @@ public class RealmManager {
     }
 
     /**
-     * Freezing a player
+     * Locking portals
      * @param player
      */
     public void lockRealms(Player player){
@@ -25,7 +25,7 @@ public class RealmManager {
     }
 
     /**
-     * Unfreezing a player
+     * Unlocking portals
      * @param player
      */
     public void unlockRealms(Player player){
@@ -36,7 +36,7 @@ public class RealmManager {
     }
 
     /**
-     * Return if the player is frozen
+     * Return if the portals are locked
      * @param player
      * @return
      */
