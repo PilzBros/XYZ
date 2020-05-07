@@ -2,14 +2,23 @@ package com.ethanpilz.xyz;
 
 import java.util.Random;
 
-import net.minecraft.server.v1_15_R1.MinecraftServer;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.Material;
+import org.bukkit.SkullType;
 
 import static com.ethanpilz.xyz.Strings.HelpMenu.*;
 import static com.ethanpilz.xyz.XYZ.SpigotVersion;
@@ -20,10 +29,11 @@ public class AdminCommand implements CommandExecutor {
 
     private final XYZ xyz;
     public boolean portalTravel = true;
+    public Inventory inv;
 
     private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
     private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
-    public static final String xyzVersion = "1.1.8"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
+    public static final String xyzVersion = "1.1.9"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
 
     public AdminCommand(XYZ xyz) {
         this.xyz = xyz;
@@ -66,7 +76,9 @@ public class AdminCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.AQUA + "/xyza clear (player)" + ChatColor.RED + " - " + ChatColor.GREEN + "Clear player potion effects");
                         sender.sendMessage(ChatColor.AQUA + "/xyza blind (player) " + ChatColor.GREEN + "<- toggle");
                         sender.sendMessage(ChatColor.AQUA + "/xyza spawn (player)");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza players");
                         sender.sendMessage(bottomhelpborder2);
+                        
                 } else if (Integer.parseInt(args[1]) > 2) {
 
                     sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid page.");
@@ -352,6 +364,29 @@ public class AdminCommand implements CommandExecutor {
                 sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Banned: " + ChatColor.AQUA + Bukkit.getServer().getBannedPlayers().size());
                 for(World world : Bukkit.getWorlds()) {
                     sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "World: " + ChatColor.AQUA + world.getName());
+                }
+            } else if (args[0].equalsIgnoreCase("players")) {
+
+
+                Inventory inv = Bukkit.createInventory(null, 9, ChatColor.YELLOW + "" + ChatColor.BOLD + "Player List");
+                int slot = 0;
+                for (Player all : Bukkit.getServer().getOnlinePlayers()) {
+
+                    ItemStack listedplayer = new ItemStack(Material.PLAYER_HEAD, 1, (short) SkullType.PLAYER.ordinal());
+
+                    SkullMeta listedplayerMeta = (SkullMeta) listedplayer.getItemMeta();
+
+                    listedplayerMeta.setOwner(all.getName());
+                    listedplayerMeta.setDisplayName(all.getName());
+                    listedplayer.setItemMeta(listedplayerMeta);
+
+                    inv.setItem(slot, listedplayer);
+                    slot += 1;
+
+                    Player player = (Player) sender;
+                    player.openInventory(inv);
+                    return true;
+
                 }
             }
                     else {

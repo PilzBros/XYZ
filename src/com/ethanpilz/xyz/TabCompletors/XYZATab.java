@@ -25,6 +25,7 @@ public class XYZATab implements TabCompleter {
             arguments.add("clear");
             arguments.add("blind");
             arguments.add("serverinfo");
+            arguments.add("players");
         }
 
         List<String> result = new ArrayList<String>();
