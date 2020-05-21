@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz;
+package com.ethanpilz.xyz.Command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -54,11 +54,9 @@ public class UserCommand implements CommandExecutor {
                         sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Biome: " + ChatColor.LIGHT_PURPLE + ((Player) sender).getWorld().getBiome(((Player) sender).getLocation().getBlockX(), ((Player) sender).getLocation().getBlockZ()).toString().toLowerCase());
 
                     } else if (args[0].equalsIgnoreCase("chunk")) {
-                        if (sender instanceof Player) {
-                            Location playerLocation = ((Player) sender).getLocation();
-                            sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Chunk = " + ChatColor.GREEN + playerLocation.getBlock().getChunk().getX()
-                                    + ChatColor.YELLOW + ", " + ChatColor.GREEN + playerLocation.getChunk().getZ());
-                        }
+                        Location playerLocation = ((Player) sender).getLocation();
+                        sender.sendMessage(xyzprefix + ChatColor.YELLOW + "Chunk = " + ChatColor.GREEN + playerLocation.getBlock().getChunk().getX()
+                                + ChatColor.YELLOW + ", " + ChatColor.GREEN + playerLocation.getChunk().getZ());
                     } else if (args[0].equalsIgnoreCase("cross") || args[0].equalsIgnoreCase("c")) {
 
                         Player p = (Player) sender;

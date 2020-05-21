@@ -1,7 +1,9 @@
-package com.ethanpilz.xyz;
+package com.ethanpilz.xyz.Command;
 
 import java.util.Random;
 
+import com.ethanpilz.xyz.Menu.PlayerMenu;
+import com.ethanpilz.xyz.XYZ;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.Location;
@@ -15,25 +17,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-
 import static com.ethanpilz.xyz.Strings.HelpMenu.*;
-import static com.ethanpilz.xyz.XYZ.SpigotVersion;
+import static com.ethanpilz.xyz.XYZ.spigotVersion;
 
 @SuppressWarnings("unused")
 
 public class AdminCommand implements CommandExecutor {
 
     private final XYZ xyz;
-    public boolean portalTravel = true;
     public Inventory inv;
-
-    private static final String xyzAprefix = ChatColor.GOLD + "[XYZ] ";
-    private static final String xyzprefix = ChatColor.GOLD + "[XYZ] ";
-    public static final String xyzVersion = "1.1.9"; //<----- VERSION CHANGE HERE FOR EVERY UPDATE!!!
 
     public AdminCommand(XYZ xyz) {
         this.xyz = xyz;
@@ -76,17 +68,19 @@ public class AdminCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.AQUA + "/xyza clear (player)" + ChatColor.RED + " - " + ChatColor.GREEN + "Clear player potion effects");
                         sender.sendMessage(ChatColor.AQUA + "/xyza blind (player) " + ChatColor.GREEN + "<- toggle");
                         sender.sendMessage(ChatColor.AQUA + "/xyza spawn (player)");
-                        sender.sendMessage(ChatColor.AQUA + "/xyza players");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza players" + ChatColor.RED + " - " + ChatColor.YELLOW + "view online players in GUI");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza portals (lock/unlock)" + ChatColor.RED + " - " + ChatColor.YELLOW + "disable portal travel");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza lockdown" + ChatColor.GREEN + "<- toggle");
                         sender.sendMessage(bottomhelpborder2);
                         
                 } else if (Integer.parseInt(args[1]) > 2) {
 
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid page.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid page.");
                 }
             } else if (args[0].equalsIgnoreCase("version") || args[0].equalsIgnoreCase("v")) {
 
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + ">>Spigot Official " + ChatColor.AQUA + xyzVersion);
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Last built for " + ChatColor.GREEN + SpigotVersion + ChatColor.YELLOW + " on" + ChatColor.AQUA + "April 29, 2020");
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + ">> Spigot Official " + ChatColor.AQUA + XYZ.pluginVersion);
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Last built for " + ChatColor.GREEN + spigotVersion + ChatColor.YELLOW + " on" + ChatColor.AQUA + " May 18, 2020");
 
             } else if (args[0].equalsIgnoreCase("other") || args[0].equalsIgnoreCase("o")) {
                 if (args.length == 2) {
@@ -97,19 +91,19 @@ public class AdminCommand implements CommandExecutor {
                         int y = target.getLocation().getBlockY();
                         int z = target.getLocation().getBlockZ();
 
-                        sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.AQUA + "'s" + ChatColor.GREEN + " location is");
-                        sender.sendMessage(xyzAprefix + ChatColor.BLUE + "X" + ChatColor.WHITE + " = " + ChatColor.GREEN + x);
-                        sender.sendMessage(xyzAprefix + ChatColor.BLUE + "Y" + ChatColor.WHITE + " = " + ChatColor.GREEN + y);
-                        sender.sendMessage(xyzAprefix + ChatColor.BLUE + "Z" + ChatColor.WHITE + " = " + ChatColor.GREEN + z);
-                        sender.sendMessage(xyzprefix + ChatColor.BLUE + "World: " + ChatColor.LIGHT_PURPLE + target.getWorld().getName());
-                        sender.sendMessage(xyzprefix + ChatColor.BLUE + "Biome: " + ChatColor.LIGHT_PURPLE + target.getWorld().getBiome(target.getLocation().getBlockX(), target.getLocation().getBlockZ()));
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + target.getName() + ChatColor.AQUA + "'s" + ChatColor.GREEN + " location is");
+                        sender.sendMessage(ChatColor.BLUE + "X" + ChatColor.WHITE + " = " + ChatColor.GREEN + x);
+                        sender.sendMessage(ChatColor.BLUE + "Y" + ChatColor.WHITE + " = " + ChatColor.GREEN + y);
+                        sender.sendMessage(ChatColor.BLUE + "Z" + ChatColor.WHITE + " = " + ChatColor.GREEN + z);
+                        sender.sendMessage(ChatColor.BLUE + "World: " + ChatColor.LIGHT_PURPLE + target.getWorld().getName());
+                        sender.sendMessage(ChatColor.BLUE + "Biome: " + ChatColor.LIGHT_PURPLE + target.getWorld().getBiome(target.getLocation().getBlockX(), target.getLocation().getBlockZ()));
 
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.DARK_RED + "Invalid player");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.DARK_RED + "Invalid player");
                     }
 
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.DARK_RED + "You must provide a player");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.DARK_RED + "You must provide a player");
                 }
 
             } else if (args[0].equalsIgnoreCase("relocate") || (args[0].equalsIgnoreCase("r"))) {
@@ -126,19 +120,19 @@ public class AdminCommand implements CommandExecutor {
                         receiver.teleport(teleportLocation);
                         receiver.playSound(receiver.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 
-                        sender.sendMessage(xyzAprefix + ChatColor.AQUA + name + ChatColor.YELLOW + " has been moved " + (int) teleportLocation.distance(originalLocation) + " blocks away.");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + name + ChatColor.YELLOW + " has been moved " + (int) teleportLocation.distance(originalLocation) + " blocks away.");
                         receiver.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 1000000)); //invulnerability for 5 seconds after cast
-                        receiver.sendMessage(xyzprefix + ChatColor.YELLOW + "You've been relocated " + ChatColor.AQUA + (int) teleportLocation.distance(originalLocation) + ChatColor.YELLOW + " blocks away.");
+                        receiver.sendMessage(XYZ.xyzPrefix + ChatColor.YELLOW + "You've been relocated " + ChatColor.AQUA + (int) teleportLocation.distance(originalLocation) + ChatColor.YELLOW + " blocks away.");
 
                     } else if (Bukkit.getPlayer(args[1]) == null) {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player");
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player");
                     }
 
 
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You must provide a player.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "You must provide a player.");
                 }
 
             } else if (args[0].equalsIgnoreCase("tp")) {
@@ -154,14 +148,14 @@ public class AdminCommand implements CommandExecutor {
 
                             p1.teleport(p2.getLocation());
 
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Teleported " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.GREEN + "Teleported " + ChatColor.AQUA + p1name + ChatColor.GREEN + " to " + ChatColor.AQUA + p2name);
                             p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 
                         } else {
-                            sender.sendMessage(xyzAprefix + ChatColor.RED + "Second player is invalid.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Second player is invalid.");
                         }
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "First and/or second player is invalid.");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "First and/or second player is invalid.");
                     }
                 } else if (args.length == 2) {
                     if (Bukkit.getPlayer(args[1]) != null) {
@@ -170,11 +164,11 @@ public class AdminCommand implements CommandExecutor {
                         String p2name = p2.getName();
 
                         p1.teleport(p2.getLocation());
-                        sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Teleported to " + ChatColor.AQUA + p2name);
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.GREEN + "Teleported to " + ChatColor.AQUA + p2name);
                         p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                     }
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough players provided. (2 needed)");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Not enough players provided. (2 needed)");
                 }
 
 
@@ -198,23 +192,23 @@ public class AdminCommand implements CommandExecutor {
                             String name1 = p1.getName();
                             String name2 = p2.getName();
 
-                            p1.sendMessage(xyzprefix + "You've been swapped with " + ChatColor.AQUA + name2);
+                            p1.sendMessage(XYZ.xyzPrefix + "You've been swapped with " + ChatColor.AQUA + name2);
                             p1.playSound(p1.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-                            p2.sendMessage(xyzprefix + "You've been swapped with " + ChatColor.AQUA + name1);
+                            p2.sendMessage(XYZ.xyzPrefix + "You've been swapped with " + ChatColor.AQUA + name1);
                             p2.playSound(p2.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 
-                            sender.sendMessage(xyzAprefix + ChatColor.GREEN + "Swapped " + ChatColor.AQUA + p1name + ChatColor.GREEN + " with " + ChatColor.AQUA + p2name);
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.GREEN + "Swapped " + ChatColor.AQUA + p1name + ChatColor.GREEN + " with " + ChatColor.AQUA + p2name);
 
                         } else {
-                            sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid players");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid players");
                         }
 
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid players");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid players");
                     }
 
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough players provided. (2 needed)");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Not enough players provided. (2 needed)");
                 }
 
             } else if (args[0].equalsIgnoreCase("freeze")) {
@@ -223,25 +217,25 @@ public class AdminCommand implements CommandExecutor {
                         Player p = Bukkit.getPlayer(args[1]);
 
                         if (this.xyz.getFreezeManager().isPlayerFrozen(p)) {
-                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
-                            p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " unfrozen.");
+                            p.sendMessage(XYZ.xyzPrefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has unfrozen you.");
                             this.xyz.getFreezeManager().unfreezePlayer(p);
                             p.playSound(p.getLocation(), Sound.ENTITY_SILVERFISH_AMBIENT, 1, 1);
 
 
                         } else {
-                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
-                            p.sendMessage(xyzprefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " frozen.");
+                            p.sendMessage(XYZ.xyzPrefix + ChatColor.AQUA + sender.getName() + ChatColor.GREEN + " has frozen you.");
                             this.xyz.getFreezeManager().freezePlayer(p);
                             p.playSound(p.getLocation(), Sound.ENTITY_SILVERFISH_AMBIENT, 1, 1);
                         }
 
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player");
                     }
 
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Please specify a player.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Please specify a player.");
                 }
 
             } else if (args[0].equalsIgnoreCase("distance")) {
@@ -253,21 +247,21 @@ public class AdminCommand implements CommandExecutor {
                             Location targetLocation = target.getLocation();
                             Location senderLocation = ((Player) sender).getLocation();
                             if (((Player) sender).getWorld().equals(target.getWorld())) {
-                                sender.sendMessage(xyzAprefix + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " is " + ((int) targetLocation.distance(senderLocation)) + " blocks away");
+                                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + target.getName() + ChatColor.YELLOW + " is " + ((int) targetLocation.distance(senderLocation)) + " blocks away");
                             } else {
-                                sender.sendMessage(xyzAprefix + ChatColor.RED + "You're in " + ChatColor.GREEN + ((Player) sender).getWorld().getName()
+                                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "You're in " + ChatColor.GREEN + ((Player) sender).getWorld().getName()
                                         + ChatColor.RED + " and " + ChatColor.AQUA + target.getName() + ChatColor.RED + " is in " + ChatColor.GREEN + target.getWorld().getName());
                             }
                         } else {
-                            sender.sendMessage(xyzAprefix + ChatColor.RED + "This can't be executed by the console, because you don't have coordinates.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "This can't be executed by the console, because you don't have coordinates.");
                         }
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player");
                     }
                 } else if (args.length > 2) {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Too many arguments. Correct usage: " + ChatColor.AQUA + "/xyza distance (player)");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Too many arguments. Correct usage: " + ChatColor.AQUA + "/xyza distance (player)");
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to compare distances with.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "You have to include a player to compare distances with.");
                 }
             } else if (args[0].equalsIgnoreCase("spawn")) {
                 if (args.length == 2) {
@@ -277,44 +271,49 @@ public class AdminCommand implements CommandExecutor {
                         target.teleport(spawn);
                         target.playSound(target.getLocation(), Sound.ENTITY_DROWNED_SHOOT, 1, 1);
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player");
                     }
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Please specify a player.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Please specify a player.");
                 }
-            } else if (args[0].equalsIgnoreCase("portal") || args[0].equalsIgnoreCase("p")) {
+            } else if (args[0].equalsIgnoreCase("portals") || args[0].equalsIgnoreCase("p")) {
                 if (args.length == 2) {
-                    if (args[2] == "allow" || args[2] == "unlock") {
-                        boolean portalTravel = true;
-                        sender.sendMessage(xyzAprefix + "Portals have been" + ChatColor.GREEN + "unlocked.");
-                    } else if (args[2] == "deny" || args[2] == "lock") {
-                        boolean portalTravel = false;
-                        sender.sendMessage(xyzAprefix + "Portals have been" + ChatColor.RED + "locked.");
+                    if (args[1].equals("allow") || args[1].equals("unlock")) {
+                        xyz.getRealmManager().unlockRealms();
+                        sender.sendMessage(XYZ.xyzaPrefix + "Portals have been " + ChatColor.GREEN + "unlocked.");
+                    } else if (args[1].equalsIgnoreCase("deny")  || args[1].equalsIgnoreCase("lock")) {
+                        xyz.getRealmManager().lockRealms();
+                        sender.sendMessage(XYZ.xyzaPrefix + "Portals have been " + ChatColor.RED + "locked.");
 
-                    } else if (args[2] != "lock" || args[2] != "unlock") {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Unknown request " + ChatColor.AQUA + args[2] + ChatColor.RED + ". " + ChatColor.RED + "Use " +
-                                ChatColor.GREEN + "/xyza portal (lock/unlock)");
+                    } else {
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Unrecognized argument. Try" + ChatColor.AQUA + "/xyza portals (lock/unlock)");
+
                     }
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Not enough arguments. " + ChatColor.AQUA + "/xyza portal (lock/unlock)");
+                    if (xyz.getRealmManager().areRealmsLocked()) {
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Currently, portals are " + ChatColor.RED + "locked" + ChatColor.YELLOW + ". " + ChatColor.YELLOW + "Change that with " + ChatColor.AQUA + "/xyza portals (lock/unlock)");
+                    } else if (!xyz.getRealmManager().areRealmsLocked()) {
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Currently, portals are " + ChatColor.GREEN + "unlocked" + ChatColor.YELLOW + ". " + ChatColor.YELLOW + "Change that with " + ChatColor.AQUA + "/xyza portals (lock/unlock)");
+                    }
                 }
+
             } else if (args[0].equalsIgnoreCase("stalk")) {
                 if (args.length == 2) {
                     if (Bukkit.getPlayer(args[1]) != null) {
                         Player target = Bukkit.getServer().getPlayer(args[1]);
                         Player sender1 = (Player) sender;
-                        sender1.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000000, 1)); //invisibilty forever
+                        sender1.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, -1, 1)); //invisibilty forever
                         sender1.teleport(target.getLocation());
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA + args[1]);
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA + args[1]);
                     }
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to stalk.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "You have to include a player to stalk.");
                 }
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (args.length == 2) {
                     if (Bukkit.getPlayer(args[1]) != null) {
-                        sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Potion effects cleared from " + ChatColor.AQUA + Bukkit.getPlayer(args[1]).getName());
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Potion effects cleared from " + ChatColor.AQUA + Bukkit.getPlayer(args[1]).getName());
                         Player player = Bukkit.getServer().getPlayer(args[1]);
                         assert player != null;
                         for (PotionEffect effect : player.getActivePotionEffects()) {
@@ -323,7 +322,7 @@ public class AdminCommand implements CommandExecutor {
                     }
                 } else if (args.length == 1) {
                     if (sender instanceof Player) {
-                        sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Cleared your potion effects.");
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Cleared your potion effects.");
                         Player sender1 = (Player) sender;
                         for (PotionEffect effect : sender1.getActivePotionEffects()) {
                             sender1.removePotionEffect(effect.getType());
@@ -336,69 +335,60 @@ public class AdminCommand implements CommandExecutor {
                         Player p = Bukkit.getPlayer(args[1]);
 
                         if (this.xyz.getBlindManager().isPlayerBlind(p)) {
-                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " is no longer blinded.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " is no longer blinded.");
                             this.xyz.getBlindManager().unblindPlayer(p);
-                            p.playSound(p.getLocation(), Sound.ENTITY_BAT_LOOP, 1, 1);
-
                         } else {
-                            sender.sendMessage(xyzAprefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " blinded.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.AQUA + p.getName() + ChatColor.GREEN + " blinded.");
                             this.xyz.getBlindManager().blindPlayer(p);
-                            p.playSound(p.getLocation(), Sound.ENTITY_BAT_DEATH, 1, 1);
                         }
 
                     } else {
-                        sender.sendMessage(xyzAprefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA);
+                        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA);
                     }
 
                 } else {
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "You have to include a player to blind.");
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "You have to include a player to blind.");
                 }
 
             } else if (args[0].equalsIgnoreCase("serverinfo")){
 
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Server version: " + ChatColor.AQUA + Bukkit.getServer().getBukkitVersion());
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "IP: " + ChatColor.AQUA + Bukkit.getServer().getIp());
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Total memory - " + ChatColor.AQUA + (Runtime.getRuntime().totalMemory()/1024/1024) + " MB");
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Free memory - " + ChatColor.AQUA + (Runtime.getRuntime().freeMemory()/1024/1024) + " MB");
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Online Mode: " + ChatColor.AQUA + Bukkit.getServer().getOnlineMode());
-                sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "Banned: " + ChatColor.AQUA + Bukkit.getServer().getBannedPlayers().size());
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Server version: " + ChatColor.AQUA + Bukkit.getServer().getBukkitVersion());
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "IP: " + ChatColor.AQUA + Bukkit.getServer().getIp());
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Total memory - " + ChatColor.AQUA + (Runtime.getRuntime().totalMemory()/1024/1024) + " MB");
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Free memory - " + ChatColor.AQUA + (Runtime.getRuntime().freeMemory()/1024/1024) + " MB");
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals locked - " + ChatColor.AQUA + xyz.getRealmManager().areRealmsLocked());
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Online Mode: " + ChatColor.AQUA + Bukkit.getServer().getOnlineMode());
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Banned: " + ChatColor.AQUA + Bukkit.getServer().getBannedPlayers().size());
                 for(World world : Bukkit.getWorlds()) {
-                    sender.sendMessage(xyzAprefix + ChatColor.YELLOW + "World: " + ChatColor.AQUA + world.getName());
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "World: " + ChatColor.AQUA + world.getName());
                 }
             } else if (args[0].equalsIgnoreCase("players")) {
 
+                Player player = (Player) sender;
+                PlayerMenu.openMenu(player);
 
-                Inventory inv = Bukkit.createInventory(null, 9, ChatColor.YELLOW + "" + ChatColor.BOLD + "Player List");
-                int slot = 0;
-                for (Player all : Bukkit.getServer().getOnlinePlayers()) {
-
-                    ItemStack listedplayer = new ItemStack(Material.PLAYER_HEAD, 1, (short) SkullType.PLAYER.ordinal());
-
-                    SkullMeta listedplayerMeta = (SkullMeta) listedplayer.getItemMeta();
-
-                    listedplayerMeta.setOwner(all.getName());
-                    listedplayerMeta.setDisplayName(all.getName());
-                    listedplayer.setItemMeta(listedplayerMeta);
-
-                    inv.setItem(slot, listedplayer);
-                    slot += 1;
-
-                    Player player = (Player) sender;
-                    player.openInventory(inv);
-                    return true;
-
+            } else if (args[0].equalsIgnoreCase("lockdown")) {
+                if (this.xyz.getLockdownManager().isServerInLockdown()) {
+                    this.xyz.getLockdownManager().liftLockdown(xyz);
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.GREEN + "Lockdown lifted.");
+                } else if (!this.xyz.getLockdownManager().isServerInLockdown()) {
+                    this.xyz.getLockdownManager().lockdownServer(xyz);
+                    sender.sendMessage(XYZ.xyzaPrefix + ChatColor.GREEN + "Lockdown imposed.");
                 }
+
             }
-                    else {
-                    String command = args[0];
-                    sender.sendMessage(xyzAprefix + ChatColor.RED + "Command " + ChatColor.AQUA + command + ChatColor.RED + " unrecognized.");
-                }
-            } else {
-            sender.sendMessage(xyzAprefix + ChatColor.RED + "Sorry, you don't have permissions to use " + ChatColor.AQUA + args[0] + ChatColor.RED + ". You'll need "
-                    + ChatColor.GREEN + "xyz.admin");
+                else {
+                String command = args[0];
+                sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Command " + ChatColor.AQUA + command + ChatColor.RED + " unrecognized. " + ChatColor.RED +
+                        "These looks like commands to me: " + ChatColor.AQUA + "version, other, relocate, tp, swap, freeze, distance, serverinfo,\n" +
+                        "      spawn, stalk, clear, blind, portals, lockdown, players");
+            }
+        } else {
+        sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Sorry, you don't have permissions to use " + ChatColor.AQUA + args[0] + ChatColor.RED + ". You'll need "
+                + ChatColor.GREEN + "xyz.admin");
         }
-        return true;
-        }
-
+    return true;
     }
+
+}
 

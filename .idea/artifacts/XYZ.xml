@@ -2,7 +2,7 @@
   <artifact type="jar" name="XYZ">
     <output-path>$USER_HOME$/Desktop/Spigot/plugins</output-path>
     <root id="archive" name="XYZ.jar">
-      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
       <element id="module-output" name="XYZ" />
     </root>
   </artifact>

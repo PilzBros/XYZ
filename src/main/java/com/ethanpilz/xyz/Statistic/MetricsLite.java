@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz;
+package com.ethanpilz.xyz.Statistic;
 
 
 /*
