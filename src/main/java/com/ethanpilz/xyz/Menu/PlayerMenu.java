@@ -14,37 +14,43 @@ import java.util.List;
 
 public class PlayerMenu {
 
-    public static String playerMenuTitle;
+    public static String playerMenuTitle = ChatColor.YELLOW + "" + ChatColor.BOLD + "Player List";
+    public static Inventory inv;
 
-    public static void openMenu(Player player) {
+    public PlayerMenu() {
+        inv = Bukkit.createInventory(null, 9, playerMenuTitle);
+        initializeItems();
+    }
 
-        playerMenuTitle = ChatColor.YELLOW + "" + ChatColor.BOLD + "Player List";
-        Inventory inv = Bukkit.createInventory(null, 9, playerMenuTitle);
+    public void initializeItems() {
         int slot = 0;
-        for (Player all : Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 
             ItemStack listedplayer = new ItemStack(Material.PLAYER_HEAD, 1, (short) SkullType.PLAYER.ordinal());
 
             SkullMeta listedplayerMeta = (SkullMeta) listedplayer.getItemMeta();
 
-            listedplayerMeta.setOwner(all.getName());
-            listedplayerMeta.setDisplayName(all.getName());
+            listedplayerMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+            listedplayerMeta.setDisplayName(player.getName());
             listedplayer.setItemMeta(listedplayerMeta);
 
             List<String> menuItemLore = new ArrayList<String>();
             menuItemLore.add(ChatColor.GREEN + "Click to teleport");
-            menuItemLore.add(ChatColor.YELLOW + "World: " + ChatColor.AQUA + all.getWorld().getName());
-            menuItemLore.add(ChatColor.YELLOW + "Health: " + ChatColor.AQUA + all.getHealth() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
-            menuItemLore.add(ChatColor.YELLOW + "Food: " + ChatColor.AQUA + all.getFoodLevel() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
-            menuItemLore.add(ChatColor.YELLOW + "Level: " + ChatColor.AQUA + all.getLevel());
+            menuItemLore.add(ChatColor.YELLOW + "World: " + ChatColor.AQUA + player.getWorld().getName());
+            menuItemLore.add(ChatColor.YELLOW + "Health: " + ChatColor.AQUA + player.getHealth() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
+            menuItemLore.add(ChatColor.YELLOW + "Food: " + ChatColor.AQUA + player.getFoodLevel() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
+            menuItemLore.add(ChatColor.YELLOW + "Level: " + ChatColor.AQUA + player.getLevel());
             listedplayerMeta.setLore(menuItemLore);
             listedplayer.setItemMeta(listedplayerMeta);
 
             inv.setItem(slot, listedplayer);
             slot += 1;
 
-            player.openInventory(inv);
         }
+    }
 
+    // You can open the inventory with this
+    public void openInventory(Player player) {
+        player.openInventory(inv);
     }
 }

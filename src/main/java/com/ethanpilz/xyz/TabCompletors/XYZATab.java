@@ -28,16 +28,18 @@ public class XYZATab implements TabCompleter {
             arguments.add("players");
             arguments.add("portals");
             arguments.add("lockdown");
+            arguments.add("world");
         }
 
         List<String> result = new ArrayList<String>();
-        if (args.length == 1) {
+        if (args.length == 1 && sender.hasPermission("xyz.admin")) {
             for (String a : arguments) {
                 if (a.toLowerCase().startsWith(args[0].toLowerCase()))
                     result.add(a);
 
             }
             return result;
+
         }
 
         return null;

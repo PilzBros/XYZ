@@ -16,6 +16,7 @@ public class XYZTab implements TabCompleter {
             arguments.add("me");
             arguments.add("cross");
             arguments.add("chunk");
+            arguments.add("share");
         }
 
         List<String> result = new ArrayList<String>();

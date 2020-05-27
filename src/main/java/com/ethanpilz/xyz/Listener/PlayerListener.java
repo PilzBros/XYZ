@@ -1,14 +1,20 @@
 package com.ethanpilz.xyz.Listener;
 
 import com.ethanpilz.xyz.XYZ;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.util.Objects;
+import java.util.logging.Level;
+
+@SuppressWarnings("unused")
 
 public class PlayerListener implements Listener {
     
@@ -34,8 +40,15 @@ public class PlayerListener implements Listener {
     public void onPlayerPortal(PlayerPortalEvent event) {
         if (this.xyz.getRealmManager().areRealmsLocked() && (!event.getPlayer().hasPermission("xyz.admin"))) {
             event.setCancelled(true);
+            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1, 50);
             event.getPlayer().sendMessage( XYZ.infoPrefix + ChatColor.YELLOW + "You can't go to " + ChatColor.AQUA +
-                    Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName() + ChatColor.YELLOW + "because portals are locked.");
+                    Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName() + ChatColor.YELLOW + " because portals are locked.");
+            Bukkit.getLogger().log(Level.INFO, event.getPlayer().getName() + " prevented from travelling through a portal");
+
+        }
+        else if (event.getPlayer().hasPermission("xyz.admin")) {
+            event.getPlayer().sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals are currently locked, but you have xyz.admin so you are allowed to travel.");
+            Bukkit.getLogger().log(Level.INFO, event.getPlayer().getName() + " bypassed portal lock due to permissions.");
         }
     }
 
@@ -55,7 +68,12 @@ public class PlayerListener implements Listener {
     public void onPlayerPreJoin(AsyncPlayerPreLoginEvent event) {
         if (this.xyz.getLockdownManager().isServerInLockdown()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "This server currently in lockdown."
-                    + ChatColor.YELLOW + "Nobody can join this server.");
+                    + ChatColor.YELLOW + "\nNobody can join this server.");
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                if (player.hasPermission("xyz.admin")) {
+                    player.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "A player was blocked from joining the server. Check console for details.");
+                }
+            }
         }
     }
 
@@ -65,6 +83,7 @@ public class PlayerListener implements Listener {
         if (this.xyz.getLockdownManager().isServerInLockdown()) {
             if (!event.getPlayer().hasPermission("xyz.admin")) {
                 event.setCancelled(true);
+                event.getPlayer().sendMessage(XYZ.infoPrefix + ChatColor.RED + "You cannot teleport during a lockdown.");
             }
         }
     }

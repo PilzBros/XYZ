@@ -33,11 +33,12 @@ public class LockdownManager {
                 this.xyz.getFreezeManager().unfreezePlayer(player);
             }
         }
-        Bukkit.broadcastMessage(XYZ.infoPrefix + ChatColor.RED + "The servers lockdown has been lifted. Joining now allowed and movement enabled.");
+        Bukkit.broadcastMessage(XYZ.infoPrefix + ChatColor.RED + "The server lockdown has been lifted. Joining now allowed and movement enabled.");
         this.isServerInLockdown = false;
     }
 
     public boolean isServerInLockdown() {
         return isServerInLockdown;
     }
+
 }
