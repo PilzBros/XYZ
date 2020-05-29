@@ -10,7 +10,7 @@
 
     <groupId>com.ethanpilz.xyz</groupId>
     <artifactId>XYZ</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <repositories>
         <repository>
             <id>spigot-repo</id>

@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.Strings;
+package com.ethanpilz.xyz.strings;
 
 import org.bukkit.ChatColor;
 

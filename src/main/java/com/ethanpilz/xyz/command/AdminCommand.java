@@ -1,9 +1,10 @@
-package com.ethanpilz.xyz.Command;
+package com.ethanpilz.xyz.command;
 
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import com.ethanpilz.xyz.Menu.PlayerMenu;
 import com.ethanpilz.xyz.XYZ;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -14,11 +15,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import sun.jvm.hotspot.gc.shared.Generation;
 
-import static com.ethanpilz.xyz.Strings.HelpMenu.*;
+import static com.ethanpilz.xyz.strings.HelpMenu.*;
 import static com.ethanpilz.xyz.XYZ.*;
 
 @SuppressWarnings("unused")
@@ -71,6 +72,7 @@ public class AdminCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.AQUA + "/xyza players" + redDash + ChatColor.YELLOW + "view online players in GUI");
                         sender.sendMessage(ChatColor.AQUA + "/xyza portals (lock/unlock)" + ChatColor.RED + " - " + ChatColor.YELLOW + "disable portal travel");
                         sender.sendMessage(ChatColor.AQUA + "/xyza lockdown " + ChatColor.GREEN + "<- toggle");
+                        sender.sendMessage(ChatColor.AQUA + "/xyza home (player)" + redDash + ChatColor.GREEN + "tp to player home");
                         sender.sendMessage(bottomhelpborder2);
 
                     } else if (Integer.parseInt(args[1]) > 2) {
@@ -398,11 +400,40 @@ public class AdminCommand implements CommandExecutor {
                         sender.sendMessage(xyzaPrefix + ChatColor.RED + "You must include a world name.");
                     }
 
-                } else {
+                } else if (args[0].equalsIgnoreCase("home")) {
+                    if (args.length == 2) {
+                        if (Bukkit.getPlayer(args[1]) != null) {
+
+                            Player player = (Player) sender;
+                            Optional<Location> playerLocation = Optional.empty();
+                            Player target = Bukkit.getPlayer(args[1]);
+
+                            try {
+                                playerLocation = XYZ.homeController.getHome(target);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            if (playerLocation.isPresent()) {
+                                player.teleport(playerLocation.get());
+                                sender.sendMessage(xyzPrefix + ChatColor.YELLOW + "Teleported to " + ChatColor.AQUA + target.getName() + "'s " + ChatColor.YELLOW + "home.");
+
+                            } else {
+                                sender.sendMessage(xyzPrefix + ChatColor.AQUA + target.getName() + ChatColor.RED + " has no home set.");
+                            }
+
+                        } else {
+                            sender.sendMessage(xyzaPrefix + ChatColor.RED + "Invalid player " + ChatColor.AQUA + args[1]);
+                        }
+                    } else {
+                        sender.sendMessage(xyzaPrefix + ChatColor.RED + "Invalid syntax. Use " + ChatColor.AQUA + "/xyza home (player)");
+                    }
+                }
+
+                else {
                     String command = args[0];
                     sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Command " + ChatColor.AQUA + command + ChatColor.RED + " unrecognized. " + ChatColor.RED +
                             "These looks like commands to me: \n" + ChatColor.AQUA + "version, other, relocate, tp, swap, freeze, distance, serverinfo, spawn," +
-                            "\n stalk, clear, blind, portals, lockdown, players, world");
+                            "\n stalk, clear, blind, portals, lockdown, players, world, home");
                 }
             } else {
                 sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Sorry, you don't have permission. You'll need " + ChatColor.GREEN + "xyz.admin");

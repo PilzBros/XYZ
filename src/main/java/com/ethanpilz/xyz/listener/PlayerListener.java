@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.Listener;
+package com.ethanpilz.xyz.listener;
 
 import com.ethanpilz.xyz.XYZ;
 import org.bukkit.Bukkit;

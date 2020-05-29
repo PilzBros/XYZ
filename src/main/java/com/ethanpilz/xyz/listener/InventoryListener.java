@@ -1,18 +1,17 @@
-package com.ethanpilz.xyz.Listener;
+package com.ethanpilz.xyz.listener;
 
 import com.ethanpilz.xyz.XYZ;
-import com.ethanpilz.xyz.Menu.PlayerMenu;
+import com.ethanpilz.xyz.menu.PlayerMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
-import static com.ethanpilz.xyz.Menu.PlayerMenu.inv;
+import static com.ethanpilz.xyz.menu.PlayerMenu.inv;
 
 public class InventoryListener implements Listener {
 

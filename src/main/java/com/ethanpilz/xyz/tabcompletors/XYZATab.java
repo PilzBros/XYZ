@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.TabCompletors;
+package com.ethanpilz.xyz.tabcompletors;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,6 +29,7 @@ public class XYZATab implements TabCompleter {
             arguments.add("portals");
             arguments.add("lockdown");
             arguments.add("world");
+            arguments.add("home");
         }
 
         List<String> result = new ArrayList<String>();

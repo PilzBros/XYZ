@@ -1,18 +1,17 @@
 package com.ethanpilz.xyz;
 
-import com.ethanpilz.xyz.Command.AdminCommand;
-import com.ethanpilz.xyz.Command.UserCommand;
-import com.ethanpilz.xyz.Listener.InventoryListener;
-import com.ethanpilz.xyz.Listener.PlayerListener;
-import com.ethanpilz.xyz.Listener.InventoryListener;
-import com.ethanpilz.xyz.Manager.FreezeManager;
-import com.ethanpilz.xyz.Manager.BlindManager;
-import com.ethanpilz.xyz.Manager.LockdownManager;
-import com.ethanpilz.xyz.Manager.RealmManager;
-import com.ethanpilz.xyz.Menu.PlayerMenu;
-import com.ethanpilz.xyz.Statistic.UpdateChecker;
-import com.ethanpilz.xyz.TabCompletors.XYZATab;
-import com.ethanpilz.xyz.TabCompletors.XYZTab;
+import com.ethanpilz.xyz.command.AdminCommand;
+import com.ethanpilz.xyz.command.UserCommand;
+import com.ethanpilz.xyz.listener.PlayerListener;
+import com.ethanpilz.xyz.manager.FreezeManager;
+import com.ethanpilz.xyz.manager.BlindManager;
+import com.ethanpilz.xyz.manager.LockdownManager;
+import com.ethanpilz.xyz.manager.RealmManager;
+import com.ethanpilz.xyz.statistics.UpdateChecker;
+import com.ethanpilz.xyz.tabcompletors.XYZATab;
+import com.ethanpilz.xyz.tabcompletors.XYZTab;
+import com.ethanpilz.xyz.controller.HomeController;
+import com.ethanpilz.xyz.io.InputOutput;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,21 +21,39 @@ import java.util.logging.Logger;
 
 public class XYZ extends JavaPlugin {
 
+    // Global Managers
+    public static InputOutput inputOutput;
     private FreezeManager freezeManager;
     private BlindManager blindManager;
     private RealmManager realmManager;
     private LockdownManager lockdownManager;
+    public static XYZ instance;
+
+    // Controllers
+    public static HomeController homeController;
+
+    // Prefixes/Strings
     public static final String xyzaPrefix = ChatColor.GOLD + "[XYZ] ";
     public static final String xyzPrefix = ChatColor.GOLD + "[XYZ] ";
     public static final String infoPrefix = ChatColor.RED + "Info" + ChatColor.DARK_GRAY + " >> ";
     public static final String redDash = ChatColor.RED + " - " + ChatColor.RESET;
-    private static final String consolePrefix = "[XYZ] ";
-    public static final String pluginVersion = "1.2.2";      // Change with each build
+    public static final String consolePrefix = "[XYZ] ";
+
+    // Versions and dates
+    public static final String pluginVersion = "1.2.3";      // Change with each build
     public static final String spigotVersion = "1.15.2";
-    public static final String buildDate = "May 27, 2020";   // Change with each build
+    public static final String buildDate = "May 29, 2020";   // Change with each build
+
+    // Logger
+    public static final Logger log = Logger.getLogger("Minecraft");
+
+
 
     @Override
     public void onEnable(){
+
+        //Instance
+        XYZ.instance = this;
 
         // Get logger
         Logger logger = this.getLogger();
@@ -45,7 +62,7 @@ public class XYZ extends JavaPlugin {
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                 logger.info("XYZ is up to date.");
             } else {
-                logger.info("There is a new update available for XYZ! Link: " + ChatColor.UNDERLINE + "https://www.spigotmc.org/resources/xyz.30713/");
+                logger.info("There is a new update available for XYZ! Link: " + "https://www.spigotmc.org/resources/xyz.30713/");
             }
         });
 
@@ -58,6 +75,13 @@ public class XYZ extends JavaPlugin {
         this.blindManager = new BlindManager(this);
         this.realmManager = new RealmManager(this);
         this.lockdownManager = new LockdownManager(this);
+
+        // Controllers
+        homeController = new HomeController();
+
+        // Database
+        inputOutput = new InputOutput();
+        inputOutput.prepareDB();
 
         // Listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);

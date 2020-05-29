@@ -1,6 +1,8 @@
-package com.ethanpilz.xyz.Command;
+package com.ethanpilz.xyz.command;
 
 import com.ethanpilz.xyz.XYZ;
+import com.ethanpilz.xyz.components.Home;
+import com.ethanpilz.xyz.exception.SaveToDatabaseException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -9,11 +11,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Optional;
 
-import static com.ethanpilz.xyz.Strings.HelpMenu.*;
-import static com.ethanpilz.xyz.XYZ.redDash;
-import static com.ethanpilz.xyz.XYZ.xyzPrefix;
+import static com.ethanpilz.xyz.XYZ.*;
+import static com.ethanpilz.xyz.strings.HelpMenu.*;
 
 
 public class UserCommand implements CommandExecutor {
@@ -33,9 +36,10 @@ public class UserCommand implements CommandExecutor {
                     sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz me " + XYZ.redDash + ChatColor.GREEN + "Find your current XYZ coordinates");
                     sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz cross" + ChatColor.WHITE + "/"
                             + ChatColor.AQUA + "c" + XYZ.redDash + ChatColor.GREEN + "XYZ of block in crosshair");
-                    sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz chunk" + XYZ.redDash + ChatColor.GREEN + "Chunk coords you're in");
+                    sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz chunk" + XYZ.redDash + ChatColor.GREEN + "Chunk coordinates you're in");
                     sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz share" + ChatColor.WHITE + "/" + ChatColor.AQUA + "s " + ChatColor.AQUA + "(player)" + redDash + ChatColor.GREEN + " Send your location to the player");
-
+                    sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz sethome" + redDash + ChatColor.GREEN + "set home to teleport to with " + ChatColor.AQUA + "/xyz home");
+                    sender.sendMessage(xyzPrefix + ChatColor.AQUA + "/xyz home" + redDash + ChatColor.GREEN + "teleport to your home");
 
             } else if (sender instanceof Player) {
                     if (args[0].equalsIgnoreCase("me")) {
@@ -86,29 +90,67 @@ public class UserCommand implements CommandExecutor {
                                 String world = Objects.requireNonNull(player.getLocation().getWorld()).getName();
 
                                 target.sendMessage(xyzPrefix + ChatColor.AQUA + player.getName() + ChatColor.YELLOW + " is sharing their location with you");
-                                target.sendMessage( ChatColor.YELLOW + "        X" + XYZ.redDash + ChatColor.AQUA + x);
-                                target.sendMessage( ChatColor.YELLOW + "        Y" + XYZ.redDash + ChatColor.AQUA + y);
-                                target.sendMessage( ChatColor.YELLOW + "        Z" + XYZ.redDash + ChatColor.AQUA + z);
-                                target.sendMessage( ChatColor.YELLOW + "        World" + redDash + ChatColor.AQUA + world);
+                                target.sendMessage( ChatColor.YELLOW + "X" + XYZ.redDash + ChatColor.AQUA + x);
+                                target.sendMessage( ChatColor.YELLOW + "Y" + XYZ.redDash + ChatColor.AQUA + y);
+                                target.sendMessage( ChatColor.YELLOW + "Z" + XYZ.redDash + ChatColor.AQUA + z);
+                                target.sendMessage( ChatColor.YELLOW + "World" + redDash + ChatColor.AQUA + world);
 
                                 sender.sendMessage(xyzPrefix + ChatColor.YELLOW + "Your location has successfully been sent to " + ChatColor.AQUA + target.getName());
 
                         }
 
-                    } else {
-                        sender.sendMessage(xyzPrefix + ChatColor.RED + "Unrecognized command " + ChatColor.AQUA + args[0]);
+                    } else if (args[0].equalsIgnoreCase("sethome")) {
+                        if (sender.hasPermission("xyz.homes")) {
+
+                            Player player = (Player) sender;
+                            Home home = new Home(player, player.getLocation());
+
+                            try {
+                                XYZ.homeController.saveHome(home);
+                            } catch (SaveToDatabaseException | SQLException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+                            sender.sendMessage(xyzPrefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
+                        }
+
+
+                    } else if (args[0].equalsIgnoreCase("home")) {
+                        if (sender.hasPermission("xyz.homes")) {
+
+                            Player player = (Player) sender;
+                            Optional<Location> playerLocation = Optional.empty();
+
+                            try {
+                                playerLocation = XYZ.homeController.getHome(player);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            if (playerLocation.isPresent()) {
+                                player.teleport(playerLocation.get());
+                                sender.sendMessage(xyzPrefix + ChatColor.YELLOW + "Teleported to home.");
+
+                            } else {
+                                sender.sendMessage(xyzPrefix + ChatColor.RED + "No home set. Set one with " + ChatColor.AQUA + "/xyz sethome");
+                            }
+                        }
                     }
 
-                } else {
-                    sender.sendMessage(xyzPrefix + ChatColor.RED + "You need to be a player to do this.");
+                else {
+                    sender.sendMessage(xyzPrefix + ChatColor.RED + "Unrecognized command " + ChatColor.AQUA + args[0]);
                 }
 
             } else {
-                sender.sendMessage(xyzPrefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
+                sender.sendMessage(xyzPrefix + ChatColor.RED + "You need to be a player to do this.");
+            }
 
-            } return true;
-        }
+        } else {
+            sender.sendMessage(xyzPrefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
+
+        } return true;
     }
+}
 
 
 

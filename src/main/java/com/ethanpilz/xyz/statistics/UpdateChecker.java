@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.Statistic;
+package com.ethanpilz.xyz.statistics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

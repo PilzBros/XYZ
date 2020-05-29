@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.Manager;
+package com.ethanpilz.xyz.manager;
 
 import com.ethanpilz.xyz.XYZ;
 import org.bukkit.Sound;

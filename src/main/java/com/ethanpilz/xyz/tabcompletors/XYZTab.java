@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.TabCompletors;
+package com.ethanpilz.xyz.tabcompletors;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,6 +17,8 @@ public class XYZTab implements TabCompleter {
             arguments.add("cross");
             arguments.add("chunk");
             arguments.add("share");
+            arguments.add("sethome");
+            arguments.add("home");
         }
 
         List<String> result = new ArrayList<String>();

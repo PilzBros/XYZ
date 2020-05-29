@@ -1,4 +1,4 @@
-package com.ethanpilz.xyz.Menu;
+package com.ethanpilz.xyz.menu;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
