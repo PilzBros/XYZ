@@ -135,16 +135,13 @@ public class UserCommand implements CommandExecutor {
                                 sender.sendMessage(xyzPrefix + ChatColor.RED + "No home set. Set one with " + ChatColor.AQUA + "/xyz sethome");
                             }
                         }
-                    }
 
-                else {
+                    } else {
                     sender.sendMessage(xyzPrefix + ChatColor.RED + "Unrecognized command " + ChatColor.AQUA + args[0]);
                 }
-
             } else {
                 sender.sendMessage(xyzPrefix + ChatColor.RED + "You need to be a player to do this.");
             }
-
         } else {
             sender.sendMessage(xyzPrefix + ChatColor.RED + "You don't have permission to use " + ChatColor.AQUA + args[0]);
 

@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
             Bukkit.getLogger().log(Level.INFO, event.getPlayer().getName() + " prevented from travelling through a portal");
 
         }
-        else if (event.getPlayer().hasPermission("xyz.admin")) {
+        else if (this.xyz.getRealmManager().areRealmsLocked() && event.getPlayer().hasPermission("xyz.admin")) {
             event.getPlayer().sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals are currently locked, but you have xyz.admin so you are allowed to travel.");
             Bukkit.getLogger().log(Level.INFO, event.getPlayer().getName() + " bypassed portal lock due to permissions.");
         }
@@ -58,6 +58,7 @@ public class PlayerListener implements Listener {
         if (this.xyz.getFreezeManager().isPlayerFrozen(event.getPlayer())){
             this.xyz.getFreezeManager().unfreezePlayer(event.getPlayer());
         }
+
         if (this.xyz.getBlindManager().isPlayerBlind(event.getPlayer())){
             this.xyz.getBlindManager().unblindPlayer(event.getPlayer());
         }

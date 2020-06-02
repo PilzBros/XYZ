@@ -48,11 +48,10 @@ public class XYZ extends JavaPlugin {
     public static final Logger log = Logger.getLogger("Minecraft");
 
 
-
     @Override
     public void onEnable(){
 
-        //Instance
+        // Instance
         XYZ.instance = this;
 
         // Get logger
@@ -95,8 +94,7 @@ public class XYZ extends JavaPlugin {
         getCommand("xyz").setTabCompleter(new XYZTab());
         getCommand("xyza").setTabCompleter(new XYZATab());
         getCommand("xyzadmin").setTabCompleter(new XYZATab());
-
-
+        
     }
 
     @Override

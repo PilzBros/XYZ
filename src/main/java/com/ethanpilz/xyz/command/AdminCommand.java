@@ -283,10 +283,10 @@ public class AdminCommand implements CommandExecutor {
                     if (args.length == 2) {
                         if (args[1].equals("allow") || args[1].equals("unlock")) {
                             xyz.getRealmManager().unlockRealms();
-                            sender.sendMessage(XYZ.xyzaPrefix + "Portals have been " + ChatColor.GREEN + "unlocked.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals have been " + ChatColor.GREEN + "unlocked.");
                         } else if (args[1].equalsIgnoreCase("deny") || args[1].equalsIgnoreCase("lock")) {
                             xyz.getRealmManager().lockRealms();
-                            sender.sendMessage(XYZ.xyzaPrefix + "Portals have been " + ChatColor.RED + "locked.");
+                            sender.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals have been " + ChatColor.RED + "locked.");
 
                         } else {
                             sender.sendMessage(XYZ.xyzaPrefix + ChatColor.RED + "Unrecognized argument. Try" + ChatColor.AQUA + "/xyza portals (lock/unlock)");
