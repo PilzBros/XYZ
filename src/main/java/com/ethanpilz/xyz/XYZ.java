@@ -2,6 +2,7 @@ package com.ethanpilz.xyz;
 
 import com.ethanpilz.xyz.command.AdminCommand;
 import com.ethanpilz.xyz.command.UserCommand;
+import com.ethanpilz.xyz.listener.InventoryListener;
 import com.ethanpilz.xyz.listener.PlayerListener;
 import com.ethanpilz.xyz.manager.FreezeManager;
 import com.ethanpilz.xyz.manager.BlindManager;
@@ -40,9 +41,9 @@ public class XYZ extends JavaPlugin {
     public static final String consolePrefix = "[XYZ] ";
 
     // Versions and dates
-    public static final String pluginVersion = "1.2.3";      // Change with each build
+    public static final String pluginVersion = "1.2.4";      // Change with each build
     public static final String spigotVersion = "1.15.2";
-    public static final String buildDate = "May 29, 2020";   // Change with each build
+    public static final String buildDate = "June 1, 2020";   // Change with each build
 
     // Logger
     public static final Logger log = Logger.getLogger("Minecraft");
@@ -84,7 +85,7 @@ public class XYZ extends JavaPlugin {
 
         // Listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        //getServer().getPluginManager().registerEvent(new InventoryListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
 
         getCommand("xyz").setExecutor(new UserCommand());
         getCommand("xyza").setExecutor(new AdminCommand(this));
@@ -94,7 +95,7 @@ public class XYZ extends JavaPlugin {
         getCommand("xyz").setTabCompleter(new XYZTab());
         getCommand("xyza").setTabCompleter(new XYZATab());
         getCommand("xyzadmin").setTabCompleter(new XYZATab());
-        
+
     }
 
     @Override

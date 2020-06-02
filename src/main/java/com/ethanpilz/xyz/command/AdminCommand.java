@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.ethanpilz.xyz.XYZ;
+import com.ethanpilz.xyz.menu.PlayerMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.Location;
@@ -367,7 +368,8 @@ public class AdminCommand implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("players")) {
                     if (sender instanceof Player) {
                         Player player = (Player) sender;
-                        player.sendMessage(xyzaPrefix + ChatColor.RED + "This command is disabled for this build of XYZ. Sorry");
+                        PlayerMenu playerMenu = new PlayerMenu();
+                        playerMenu.openPlayerlistInventory(player);
 
                     } else {
                         sender.sendMessage(xyzaPrefix + ChatColor.RED + "You need to be a player to do this.");

@@ -5,10 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.*;
 
 import java.util.Objects;
@@ -37,18 +39,23 @@ public class PlayerListener implements Listener {
 
     // Check portal travel for those without xyz.admin
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerPortal(PlayerPortalEvent event) {
-        if (this.xyz.getRealmManager().areRealmsLocked() && (!event.getPlayer().hasPermission("xyz.admin"))) {
-            event.setCancelled(true);
-            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1, 50);
-            event.getPlayer().sendMessage( XYZ.infoPrefix + ChatColor.YELLOW + "You can't go to " + ChatColor.AQUA +
-                    Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName() + ChatColor.YELLOW + " because portals are locked.");
-            Bukkit.getLogger().log(Level.INFO, event.getPlayer().getName() + " prevented from travelling through a portal");
+    public void onEntityPortal(EntityPortalEvent event) {
+        if (event.getEntity().getType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getEntity();
+            if (this.xyz.getRealmManager().areRealmsLocked() && (!player.hasPermission("xyz.admin"))) {
 
-        }
-        else if (this.xyz.getRealmManager().areRealmsLocked() && event.getPlayer().hasPermission("xyz.admin")) {
-            event.getPlayer().sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals are currently locked, but you have xyz.admin so you are allowed to travel.");
-            Bukkit.getLogger().log(Level.INFO, event.getPlayer().getName() + " bypassed portal lock due to permissions.");
+                event.setCancelled(true);
+                player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1, 50);
+                player.sendMessage(XYZ.infoPrefix + ChatColor.YELLOW + "You can't go to " + ChatColor.AQUA +
+                        Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName() + ChatColor.YELLOW + " because portals are locked.");
+                Bukkit.getLogger().log(Level.INFO, player.getName() + " prevented from travelling through a portal");
+
+            } else if (this.xyz.getRealmManager().areRealmsLocked() && player.hasPermission("xyz.admin")) {
+                player.sendMessage(XYZ.xyzaPrefix + ChatColor.YELLOW + "Portals are currently locked, but you have xyz.admin so you are allowed to travel.");
+                Bukkit.getLogger().log(Level.INFO, player.getName() + " bypassed portal lock due to permissions.");
+            }
+        } else if (this.xyz.getRealmManager().areRealmsLocked()) {
+            event.setCancelled(true);
         }
     }
 

@@ -1,6 +1,6 @@
 name: XYZ
 main: com.ethanpilz.xyz.XYZ
-version: 1.2.3
+version: 1.2.4
 api-version: "1.13"
 description: Player location management system
 author: Ethan Pilz

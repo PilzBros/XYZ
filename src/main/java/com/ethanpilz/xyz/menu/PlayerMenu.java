@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -34,11 +35,12 @@ public class PlayerMenu {
             listedplayerMeta.setDisplayName(player.getName());
             listedplayer.setItemMeta(listedplayerMeta);
 
-            List<String> menuItemLore = new ArrayList<String>();
-            menuItemLore.add(ChatColor.GREEN + "Click to teleport");
+            List<String> menuItemLore = new ArrayList<>();
+            menuItemLore.add(ChatColor.GREEN + "" + ChatColor.UNDERLINE + "Click to teleport");
             menuItemLore.add(ChatColor.YELLOW + "World: " + ChatColor.AQUA + player.getWorld().getName());
             menuItemLore.add(ChatColor.YELLOW + "Health: " + ChatColor.AQUA + player.getHealth() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
             menuItemLore.add(ChatColor.YELLOW + "Food: " + ChatColor.AQUA + player.getFoodLevel() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
+            menuItemLore.add(ChatColor.YELLOW + "Armor: " + ChatColor.AQUA + player.getAttribute(Attribute.GENERIC_ARMOR).getValue() + ChatColor.WHITE + "/" + ChatColor.AQUA + "20");
             menuItemLore.add(ChatColor.YELLOW + "Level: " + ChatColor.AQUA + player.getLevel());
             listedplayerMeta.setLore(menuItemLore);
             listedplayer.setItemMeta(listedplayerMeta);
@@ -50,7 +52,7 @@ public class PlayerMenu {
     }
 
     // You can open the inventory with this
-    public void openInventory(Player player) {
+    public void openPlayerlistInventory(Player player) {
         player.openInventory(inv);
     }
 }

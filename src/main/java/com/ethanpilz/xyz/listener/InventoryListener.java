@@ -24,25 +24,24 @@ public class InventoryListener implements Listener {
     // Check for clicks on items
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
-        if (!e.getView().getTitle().equals(PlayerMenu.playerMenuTitle)) {
-            return;
+        if (e.getView().getTitle().equals(PlayerMenu.playerMenuTitle)) {
+
+            e.setCancelled(true);
+
+            final ItemStack clickedItem = e.getCurrentItem();
+
+            // verify current item is not null
+            if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
+
+            // Using slots click is a best option for your inventory click's
+            Player player = Bukkit.getPlayer(clickedItem.getItemMeta().getDisplayName());
+            e.getWhoClicked().teleport(player);
         }
-
-        e.setCancelled(true);
-
-        final ItemStack clickedItem = e.getCurrentItem();
-
-        // verify current item is not null
-        if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
-
-        // Using slots click is a best option for your inventory click's
-        Player player = Bukkit.getPlayer(clickedItem.getItemMeta().getDisplayName());
-        e.getWhoClicked().teleport(player);
     }
 
     // Cancel dragging in our inventory
     @EventHandler
-    public void onInventoryClick(final InventoryDragEvent e) {
+    public void onInventoryDrag(final InventoryDragEvent e) {
         if (e.getInventory() == inv) {
             e.setCancelled(true);
         }
